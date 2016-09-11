@@ -38,7 +38,7 @@
 				<artifactId>service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<!-- Test Dependencies -->
 			<dependency>
 				<groupId>junit</groupId>
@@ -46,7 +46,7 @@
 				<version>${junit.version}</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<!-- Bean Validation Dependencies -->
 			<dependency>
 				<groupId>javax.validation</groupId>
@@ -87,6 +87,7 @@
 				<artifactId>hsqldb</artifactId>
 				<version>1.8.0.10</version>
 			</dependency>
+			
 			<!-- mysql -->
 			<dependency>
 				<groupId>mysql</groupId>
@@ -100,8 +101,8 @@
 				<version>1.0.0.Final</version>
 				<scope>compile</scope>
 			</dependency>
+			
 			<!-- Spring Dependencies -->
-
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
@@ -122,14 +123,12 @@
 				<artifactId>spring-tx</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
 				<version>${spring.version}</version>
 				<scope>test</scope>
 			</dependency>
-
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
@@ -144,7 +143,6 @@
 			</dependency>
 
 			<!-- DB Dependencies -->
-
 			<dependency>
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
@@ -167,19 +165,14 @@
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.4</version>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.5.1</version>
 					<configuration>
-						<warSourceDirectory>src/main/webapp</warSourceDirectory>
-						<warName>person</warName>
-						<failOnMissingWebXml>false</failOnMissingWebXml>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
 					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
-		<finalName>${project.artifactId}</finalName>
 	</build>
 </project>

@@ -72,11 +72,8 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<warSourceDirectory>src/main/webapp</warSourceDirectory>
-					<warName>person</warName>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
