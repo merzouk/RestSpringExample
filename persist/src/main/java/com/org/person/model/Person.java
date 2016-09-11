@@ -3,34 +3,21 @@ package com.org.person.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Table(name = "Person")
-@Entity(name = "Person")
 public class Person implements Serializable
 {
    
    /**
     * 
     */
-   private static final long serialVersionUID = 7471031565375439668L;
+   private static final long serialVersionUID = 747103156537579668L;
    
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+
    private Integer           id;
    
-   @Column(name = "firstName", length = 35, nullable = false, unique = false)
    private String            firstName;
    
-   @Column(name = "lastName", length = 35, nullable = false, unique = false)
    private String            lastName;
    
-   @Column(name = "email", length = 80, nullable = false, unique = true)
    private String            email;
    
    public Person()
