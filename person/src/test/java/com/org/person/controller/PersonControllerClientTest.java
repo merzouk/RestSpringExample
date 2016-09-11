@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.org.person.entity.PersonEntity;
 
+import org.junit.Assert;
+
 /**
  * 
  * A Renseigner.
@@ -26,7 +28,9 @@ import com.org.person.entity.PersonEntity;
 public class PersonControllerClientTest
 {
    
-   private static final Logger logger = LoggerFactory.getLogger( PersonControllerClientTest.class );
+   private static final Logger logger           = LoggerFactory.getLogger( PersonControllerClientTest.class );
+   
+   public static final String  REST_SERVICE_URI = "http://localhost:8585/person/gestionPersonnel/";
    
    @Before
    public void init()
@@ -56,29 +60,29 @@ public class PersonControllerClientTest
       }
    }
    
-   public static final String REST_SERVICE_URI = "http://localhost:8585/person/gestionPersonnel/";
-   
    /**
     * GET
     */
    @SuppressWarnings("unchecked")
-   private static List<LinkedHashMap<String, Object>> listAllPersons()
+   private static int listAllPersons()
    {
       logger.info( "Testing listAllPersons API" );
       RestTemplate restTemplate = new RestTemplate();
       List<LinkedHashMap<String, Object>> personsMap = restTemplate.getForObject( REST_SERVICE_URI + "/persons/", List.class );
+      int counter = 0;
       if( personsMap != null )
       {
          for( LinkedHashMap<String, Object> map : personsMap )
          {
             logger.info( "person " + map.toString() );
+            counter++;
          }
       }
       else
       {
          logger.info( "No person found" );
       }
-      return personsMap;
+      return counter;
    }
    
    /**
@@ -162,16 +166,20 @@ public class PersonControllerClientTest
    @Test
    public void allTest()
    {
-       createPerson();
-       createPerson();
-       createPerson();
-       createPerson();
-       createPerson();
-       getPerson( 1 );
-       createPerson();
-       listAllPersons();
-       updatePerson( 3 );
-       deletePerson( 4 );
-       listAllPersons();
+      createPerson();
+      createPerson();
+      createPerson();
+      createPerson();
+      createPerson();
+      int actual = listAllPersons();
+      Assert.assertEquals( 5, actual );
+      getPerson( 1 );
+      createPerson();
+      actual = listAllPersons();
+      Assert.assertEquals( 6, actual );
+      updatePerson( 3 );
+      deletePerson( 4 );
+      actual = listAllPersons();
+      Assert.assertEquals( 5, actual );
    }
 }
