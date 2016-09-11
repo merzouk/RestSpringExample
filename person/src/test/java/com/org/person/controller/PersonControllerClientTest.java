@@ -162,17 +162,16 @@ public class PersonControllerClientTest
    @Test
    public void allTest()
    {
-      createPerson();
-      createPerson();
-      createPerson();
-      createPerson();
-      getPerson( 1 );
-      createPerson();
-      listAllPersons();
-      updatePerson( 8 );
-      listAllPersons();
-      deletePerson( 11 );
-      listAllPersons();
-      listAllPersons();
+       createPerson();
+       createPerson();
+       createPerson();
+       createPerson();
+       createPerson();
+       getPerson( 1 );
+       createPerson();
+       listAllPersons();
+       updatePerson( 3 );
+       deletePerson( 4 );
+       listAllPersons();
    }
 }
