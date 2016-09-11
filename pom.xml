@@ -48,61 +48,8 @@
 				<scope>test</scope>
 			</dependency>
 
-			<!-- Bean Validation Dependencies -->
-			<dependency>
-				<groupId>javax.validation</groupId>
-				<artifactId>validation-api</artifactId>
-				<version>1.0.0.GA</version>
-				<scope>compile</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-validator</artifactId>
-				<version>4.0.0.GA</version>
-				<scope>compile</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<!-- JPA Persistence Dependencies -->
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-entitymanager</artifactId>
-				<version>3.6.0.Final</version>
-				<scope>compile</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>hsqldb</groupId>
-				<artifactId>hsqldb</artifactId>
-				<version>1.8.0.10</version>
-			</dependency>
-			<!-- mysql -->
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>5.1.18</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.hibernate.javax.persistence</groupId>
-				<artifactId>hibernate-jpa-2.0-api</artifactId>
-				<version>1.0.0.Final</version>
-				<scope>compile</scope>
-			</dependency>
+			
 			<!-- Spring Dependencies -->
-
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
@@ -123,7 +70,6 @@
 				<artifactId>spring-tx</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
@@ -136,23 +82,6 @@
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
 				<version>${logback-classic.version}</version>
-			</dependency>
-
-			<!-- DB Dependencies -->
-
-			<dependency>
-				<groupId>commons-dbcp</groupId>
-				<artifactId>commons-dbcp</artifactId>
-				<version>20030825.184428</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>commons-pool</groupId>
-				<artifactId>commons-pool</artifactId>
-				<version>20030825.183949</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
