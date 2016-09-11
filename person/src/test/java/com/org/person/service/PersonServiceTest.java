@@ -26,10 +26,9 @@
 package com.org.person.service;
 
 import java.util.List;
+import java.util.Random;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +40,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.org.person.model.Person;
+import com.org.person.entity.PersonEntity;
 
 /**
  * A Renseigner.
@@ -62,73 +61,45 @@ public class PersonServiceTest
    @Autowired
    private PersonService       personService;
    
-   @Before
-   public void init()
-   {
-      logger.info( "init" );
-      try
-      {
-         
-      }
-      catch( Exception e )
-      {
-         logger.info( "Error ", e );
-      }
-   }
-   
-   @After
-   public void destroy()
-   {
-      logger.info( "destroy" );
-      try
-      {
-         
-      }
-      catch( Exception e )
-      {
-         logger.info( "Error ", e );
-      }
-   }
-   
    @Test
    public void test_1()
    {
       Integer primaryKey = 1;
-      Person p = new Person();
-      String email = "ry@email.com";
-      String firstName = "Ry";
+      PersonEntity p = new PersonEntity();
+      String email = generateStringRandom( 10 );
+      String firstName = generateStringRandom( 10 );
       p.setFirstName( firstName );
-      String lastName = "MMR";
+      String lastName = generateStringRandom( 10 );
       p.setLastName( lastName );
-      p.setEmail( email );
+      p.setEmail( email + "@email.com" );
       /**
        * 
        */
       logger.info( "save test" );
-      p = personService.savePerson( p );
+      p = personService.savePerson( p);
       Integer id = p.getId();
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com" , p.getEmail() );
       /**
        * 
        */
-      List<Person> list = personService.findByLastName( lastName );
+      List<PersonEntity> list = personService.findByLastName( lastName );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
        * 
        */
-      p = personService.findByEmail( email );
+      p = personService.findByEmail( email + "@email.com" );
       Assert.assertNotNull( p );
       Assert.assertNotNull( p.getId() );
       Assert.assertEquals( primaryKey, p.getId() );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
@@ -139,7 +110,7 @@ public class PersonServiceTest
       p = list.get( 0 );
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
@@ -149,15 +120,15 @@ public class PersonServiceTest
       p = personService.findById( primaryKey );
       Assert.assertNotNull( "Person not found!", p );
       Assert.assertEquals( primaryKey, p.getId() );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
        * 
        */
-      email = "ry_1@email.com";
+      email = email + "_1@email.com";
       p.setEmail( email );
-      personService.updatePerson( p );
+      personService.updatePerson(  p );
       /**
        * 
        */
@@ -177,14 +148,30 @@ public class PersonServiceTest
       /**
        * 
        */
-      p = new Person();
-      email = "ry_1@email.com";
-      firstName = "Ry1";
+      p = new PersonEntity();
+      firstName = generateStringRandom( 10 );
       p.setFirstName( firstName );
-      lastName = "MMR1";
+      lastName = generateStringRandom( 10 );
       p.setLastName( lastName );
       p.setEmail( email );
       p = personService.savePerson( p );
       Assert.assertNull( p );
+   }
+   
+   private String generateStringRandom( int length )
+   {
+      if( length == 0 )
+      {
+         length = 20;
+      }
+      char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+      StringBuilder sb = new StringBuilder();
+      Random random = new Random();
+      for( int i = 0; i < length; i++ )
+      {
+         char c = chars[random.nextInt( chars.length )];
+         sb.append( c );
+      }
+      return sb.toString();
    }
 }

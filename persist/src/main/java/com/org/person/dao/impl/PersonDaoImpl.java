@@ -7,28 +7,35 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.org.dao.ObjectDao;
-import com.org.person.model.Person;
+import com.org.person.entity.PersonEntity;
+import com.org.tools.ConstantesUtils;
+import com.org.tools.Utils;
 
 @Repository("objectDao")
 @Transactional
-public class PersonDaoImpl implements ObjectDao<Person>
+public class PersonDaoImpl implements ObjectDao<PersonEntity>
 {
    
+   private static final Logger logger = LoggerFactory.getLogger( PersonDaoImpl.class );
+   
    @PersistenceContext
-   private EntityManager entityManager;
+   private EntityManager       entityManager;
    
    /**
     * 
     * @see com.org.dao.ObjectDao#findAll()
     */
    @SuppressWarnings("unchecked")
-   public List<Person> findAll()
+   public List<PersonEntity> findAll()
    {
-      List<Person> list = entityManager.createQuery( "select p from Person p" ).getResultList();
+      logger.debug( "findAll" );
+      List<PersonEntity> list = entityManager.createQuery( "select p from Person p" ).getResultList();
       return list;
    }
    
@@ -36,13 +43,14 @@ public class PersonDaoImpl implements ObjectDao<Person>
     * 
     * @see com.org.dao.ObjectDao#findById(java.lang.Integer)
     */
-   public Person findById( Integer primaryKey )
+   public PersonEntity findById( Integer primaryKey )
    {
+      logger.debug( "findById  {}", primaryKey );
       if( primaryKey == null || primaryKey.intValue() <= 0 )
       {
          return null;
       }
-      return entityManager.find( Person.class, primaryKey );
+      return entityManager.find( PersonEntity.class, primaryKey );
    }
    
    /**
@@ -50,22 +58,20 @@ public class PersonDaoImpl implements ObjectDao<Person>
     * @see com.org.dao.ObjectDao#findByLastName(java.lang.String)
     */
    @SuppressWarnings("unchecked")
-   public List<Person> findByLastName( String lastName )
+   public List<PersonEntity> findByLastName( String lastName )
    {
+      logger.debug( "findByLastName {} ", lastName );
       if( lastName == null || lastName.trim().length() < 1 )
       {
-         return new ArrayList<Person>();
+         return new ArrayList<PersonEntity>();
       }
       return entityManager.createQuery( "select p from Person p where p.lastName = :lastName" ).setParameter( "lastName", lastName ).getResultList();
    }
    
-   /**
-    * 
-    * @see com.org.dao.ObjectDao#findByEmail(java.lang.String)
-    */
-   public Person findByEmail( String email )
+   public PersonEntity findByEmail( String email )
    {
-      if( email == null || email.trim().length() < 10 || !isValidEmailAddress( email ) )
+      logger.debug( "findByEmail  {}", email );
+      if( email == null || email.trim().length() < 10 || !Utils.isValidEmailAddress( email ) )
       {
          return null;
       }
@@ -76,11 +82,11 @@ public class PersonDaoImpl implements ObjectDao<Person>
       }
       catch( Exception e )
       {
-         // TODO: handle exception
+         logger.error( "Eror during load person by email {} ", email, e );
       }
       if( obj != null )
       {
-         return (Person) obj;
+         return (PersonEntity) obj;
       }
       return null;
    }
@@ -90,22 +96,24 @@ public class PersonDaoImpl implements ObjectDao<Person>
     * @see com.org.dao.ObjectDao#findByLastName(java.lang.String)
     */
    @SuppressWarnings("unchecked")
-   public List<Person> findByFirstNameAndLastName( String lastName, String firstName )
+   public List<PersonEntity> findByFirstNameAndLastName( String lastName, String firstName )
    {
+      logger.debug( "findByFirstNameAndLastName  {} {}", lastName, firstName );
       if( lastName == null || lastName.trim().length() < 1 )
       {
-         return new ArrayList<Person>();
+         return new ArrayList<PersonEntity>();
       }
       return entityManager.createQuery( "select p from Person p where p.lastName = :lastName and p.firstName = :firstName" ).setParameter( "lastName", lastName ).setParameter( "firstName", firstName ).getResultList();
    }
    
    /**
     * 
-    * @see com.org.dao.ObjectDao#save(com.org.person.model.Person)
+    * @see com.org.dao.ObjectDao#save(com.org.person.entity.PersonEntity)
     */
    @Transactional
-   public Person save( Person person )
+   public PersonEntity save( PersonEntity person )
    {
+      logger.debug( "save {}", person.toString() );
       if( !validatePerson( person ) )
       {
          return null;
@@ -118,42 +126,14 @@ public class PersonDaoImpl implements ObjectDao<Person>
       return null;
    }
    
-   private boolean validatePerson( Person person )
-   {
-      if( person == null )
-      {
-         return false;
-      }
-      if( person.getEmail() == null || person.getEmail().trim().length() < 10 || !isValidEmailAddress( person.getEmail() ) )
-      {
-         return false;
-      }
-      if( person.getLastName() == null || person.getLastName().trim().length() < 1 )
-      {
-         return false;
-      }
-      if( person.getFirstName() == null || person.getFirstName().trim().length() < 1 )
-      {
-         return false;
-      }
-      return true;
-   }
-   
-   private boolean isValidEmailAddress( String email )
-   {
-      String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-      java.util.regex.Pattern p = java.util.regex.Pattern.compile( ePattern );
-      java.util.regex.Matcher m = p.matcher( email );
-      return m.matches();
-   }
-   
    /**
     * 
-    * @see com.org.dao.ObjectDao#update(com.org.person.model.Person)
+    * @see com.org.dao.ObjectDao#update(com.org.person.entity.PersonEntity)
     */
    @Transactional
-   public Person update( Person person )
+   public PersonEntity update( PersonEntity person )
    {
+      logger.debug( "update {}", person.toString() );
       if( person != null && person.getId() != null && person.getId().intValue() > 0 )
       {
          entityManager.merge( person );
@@ -168,12 +148,12 @@ public class PersonDaoImpl implements ObjectDao<Person>
    @Transactional
    public void deleteById( Integer primaryKey )
    {
-      
+      logger.debug( "deleteById {}", primaryKey );
       if( primaryKey == null || primaryKey.intValue() <= 0 )
       {
          return;
       }
-      Person entity = findById( primaryKey );
+      PersonEntity entity = findById( primaryKey );
       if( entity != null )
       {
          entityManager.remove( entity );
@@ -182,10 +162,11 @@ public class PersonDaoImpl implements ObjectDao<Person>
    
    /**
     * 
-    * @see com.org.dao.ObjectDao#isExist(com.org.person.model.Person)
+    * @see com.org.dao.ObjectDao#isExist(com.org.person.entity.PersonEntity)
     */
-   public boolean isExist( Person person )
+   public boolean isExist( PersonEntity person )
    {
+      logger.debug( "isExist {}", person.toString() );
       return findByLastName( person.getLastName() ) != null;
    }
    
@@ -196,13 +177,41 @@ public class PersonDaoImpl implements ObjectDao<Person>
    @Transactional
    public void deleteAll()
    {
-      List<Person> list = findAll();
+      logger.debug( "deleteAll " );
+      List<PersonEntity> list = findAll();
       if( list != null && list.size() > 0 )
       {
-         for( Person person : list )
+         for( PersonEntity person : list )
          {
             deleteById( person.getId() );
          }
       }
+   }
+   
+   /**
+    * 
+    * @param person
+    * @return
+    */
+   private boolean validatePerson( PersonEntity person )
+   {
+      logger.debug( "validatePerson" );
+      if( person == null )
+      {
+         return false;
+      }
+      if( person.getEmail() == null || person.getEmail().trim().length() < ConstantesUtils.EMAIL_LENGTH_MIN || !Utils.isValidEmailAddress( person.getEmail() ) )
+      {
+         return false;
+      }
+      if( person.getLastName() == null || person.getLastName().trim().length() < ConstantesUtils.NAME_LENGTH_MIN )
+      {
+         return false;
+      }
+      if( person.getFirstName() == null || person.getFirstName().trim().length() < ConstantesUtils.NAME_LENGTH_MIN )
+      {
+         return false;
+      }
+      return true;
    }
 }

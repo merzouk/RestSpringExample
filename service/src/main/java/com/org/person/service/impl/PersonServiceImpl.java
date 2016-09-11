@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.org.dao.ObjectDao;
-import com.org.person.model.Person;
+import com.org.person.entity.PersonEntity;
 import com.org.person.service.PersonService;
 
 @Service("personService")
@@ -15,13 +15,13 @@ public class PersonServiceImpl implements PersonService
 {
    
    @Autowired
-   private ObjectDao<Person> personDao;
+   private ObjectDao<PersonEntity> personDao;
    
    /**
     * 
     * @see com.org.person.service.PersonService#findAllPersons()
     */
-   public List<Person> findAllPersons()
+   public List<PersonEntity> findAllPersons()
    {
       return personDao.findAll();
    }
@@ -30,7 +30,7 @@ public class PersonServiceImpl implements PersonService
     * 
     * @see com.org.person.service.PersonService#findById(long)
     */
-   public Person findById( Integer primaryKey )
+   public PersonEntity findById( Integer primaryKey )
    {
       return personDao.findById( primaryKey );
    }
@@ -39,25 +39,25 @@ public class PersonServiceImpl implements PersonService
     * 
     * @see com.org.person.service.PersonService#findByFirstName(java.lang.String)
     */
-   public List<Person> findByLastName( String lastName )
+   public List<PersonEntity> findByLastName( String lastName )
    {
       return personDao.findByLastName( lastName );
    }
    
    /**
     * 
-    * @see com.org.person.service.PersonService#savePerson(com.org.person.model.Person)
+    * @see com.org.person.service.PersonService#savePerson(com.org.person.entity.PersonEntity)
     */
-   public Person savePerson( Person person )
+   public PersonEntity savePerson( PersonEntity person )
    {
       return personDao.save( person );
    }
    
    /**
     * 
-    * @see com.org.person.service.PersonService#updatePerson(com.org.person.model.Person)
+    * @see com.org.person.service.PersonService#updatePerson(com.org.person.entity.PersonEntity)
     */
-   public Person updatePerson( Person person )
+   public PersonEntity updatePerson( PersonEntity person )
    {
       return personDao.update( person );
    }
@@ -73,9 +73,9 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#isPersonExist(com.org.person.model.Person)
+    * @see com.org.person.service.PersonService#isPersonExist(com.org.person.entity.PersonEntity)
     */
-   public boolean isPersonExist( Person person )
+   public boolean isPersonExist( PersonEntity person )
    {
       try
       {
@@ -101,7 +101,7 @@ public class PersonServiceImpl implements PersonService
     * 
     * @see com.org.person.service.PersonService#findByFirstNameAndLastName(java.lang.String, java.lang.String)
     */
-   public List<Person> findByFirstNameAndLastName( String lastName, String firstName )
+   public List<PersonEntity> findByFirstNameAndLastName( String lastName, String firstName )
    {
       return personDao.findByFirstNameAndLastName( lastName, firstName );
    }
@@ -110,7 +110,7 @@ public class PersonServiceImpl implements PersonService
     * 
     * @see com.org.person.service.PersonService#findByEmail(java.lang.String)
     */
-   public Person findByEmail( String email )
+   public PersonEntity findByEmail( String email )
    {
       return personDao.findByEmail( email );
    }

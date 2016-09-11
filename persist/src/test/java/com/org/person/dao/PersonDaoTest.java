@@ -26,6 +26,7 @@
 package com.org.person.dao;
 
 import java.util.List;
+import java.util.Random;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -42,7 +43,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.org.dao.ObjectDao;
-import com.org.person.model.Person;
+import com.org.person.entity.PersonEntity;
 
 /**
  * A Renseigner.
@@ -58,10 +59,10 @@ import com.org.person.model.Person;
 public class PersonDaoTest
 {
    
-   private static final Logger logger = LoggerFactory.getLogger( PersonDaoTest.class );
+   private static final Logger     logger = LoggerFactory.getLogger( PersonDaoTest.class );
    
    @Autowired
-   private ObjectDao <Person>          objectDao;
+   private ObjectDao<PersonEntity> objectDao;
    
    @Before
    public void init()
@@ -95,13 +96,13 @@ public class PersonDaoTest
    public void test_1()
    {
       Integer primaryKey = 1;
-      Person p = new Person();
-      String email = "mry@email.com";
-      String firstName = "Ry";
+      PersonEntity p = new PersonEntity();
+      String email = generateStringRandom( 10 );
+      String firstName = generateStringRandom( 10 );
       p.setFirstName( firstName );
-      String lastName = "MMR";
+      String lastName = generateStringRandom( 10 );
       p.setLastName( lastName );
-      p.setEmail( email );
+      p.setEmail( email + "@email.com" );
       /**
        * 
        */
@@ -110,26 +111,26 @@ public class PersonDaoTest
       Integer id = p.getId();
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com" , p.getEmail() );
       /**
        * 
        */
-      List<Person> list = objectDao.findByLastName( lastName );
+      List<PersonEntity> list = objectDao.findByLastName( lastName );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
        * 
        */
-      p = objectDao.findByEmail( email );
+      p = objectDao.findByEmail( email + "@email.com" );
       Assert.assertNotNull( p );
       Assert.assertNotNull( p.getId() );
       Assert.assertEquals( primaryKey, p.getId() );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
@@ -140,7 +141,7 @@ public class PersonDaoTest
       p = list.get( 0 );
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
@@ -150,13 +151,13 @@ public class PersonDaoTest
       p = objectDao.findById( primaryKey );
       Assert.assertNotNull( "Person not found!", p );
       Assert.assertEquals( primaryKey, p.getId() );
-      Assert.assertEquals( email, p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
       Assert.assertEquals( firstName, p.getFirstName() );
       /**
        * 
        */
-      email = "mry_1@email.com";
+      email = email + "_1@email.com";
       p.setEmail( email );
       objectDao.update( p );
       /**
@@ -178,19 +179,30 @@ public class PersonDaoTest
       /**
        * 
        */
-      p = new Person();
-      email = "mry_1@email.com";
-      firstName = "Ry1";
+      p = new PersonEntity();
+      firstName = generateStringRandom( 10 );
       p.setFirstName( firstName );
-      lastName = "MMR1";
+      lastName = generateStringRandom( 10 );
       p.setLastName( lastName );
       p.setEmail( email );
       p = objectDao.save( p );
       Assert.assertNull( p );
-//      primaryKey = 0;
-//      Assert.assertEquals( primaryKey, p.getId() );
-//      Assert.assertEquals( null, p.getEmail() );
-//      Assert.assertEquals( null, p.getLastName() );
-//      Assert.assertEquals( null, p.getFirstName() );
+   }
+   
+   private String generateStringRandom( int length )
+   {
+      if( length == 0 )
+      {
+         length = 20;
+      }
+      char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+      StringBuilder sb = new StringBuilder();
+      Random random = new Random();
+      for( int i = 0; i < length; i++ )
+      {
+         char c = chars[random.nextInt( chars.length )];
+         sb.append( c );
+      }
+      return sb.toString();
    }
 }

@@ -3,7 +3,7 @@ package com.org.person.service;
 
 import java.util.List;
 
-import com.org.person.model.Person;
+import com.org.person.entity.PersonEntity;
 
 /**
  * 
@@ -20,21 +20,21 @@ public interface PersonService
     * @param id
     * @return
     */
-   Person findById( Integer primaryKey );
+   PersonEntity findById( Integer primaryKey );
    
    /**
     * 
     * @param lastName
     * @return
     */
-   List<Person> findByLastName( String lastName );
+   List<PersonEntity> findByLastName( String lastName );
    
    /**
     * 
     * @param email
     * @return
     */
-   Person findByEmail( String email );
+   PersonEntity findByEmail( String email );
    
    /**
     * 
@@ -42,19 +42,19 @@ public interface PersonService
     * @param firstName
     * @return
     */
-   List<Person> findByFirstNameAndLastName( String lastName, String firstName );
+   List<PersonEntity> findByFirstNameAndLastName( String lastName, String firstName );
    
    /**
     * 
     * @param person
     */
-   Person savePerson( Person person );
+   PersonEntity savePerson( PersonEntity person );
    
    /**
     * 
     * @param person
     */
-   Person updatePerson( Person person );
+   PersonEntity updatePerson( PersonEntity person );
    
    /**
     * 
@@ -66,7 +66,7 @@ public interface PersonService
     * 
     * @return
     */
-   List<Person> findAllPersons();
+   List<PersonEntity> findAllPersons();
    
    /**
     * 
@@ -78,5 +78,5 @@ public interface PersonService
     * @param person
     * @return
     */
-   public boolean isPersonExist( Person person );
+   public boolean isPersonExist( PersonEntity person );
 }

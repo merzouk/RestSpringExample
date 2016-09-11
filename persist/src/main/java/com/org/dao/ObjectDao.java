@@ -3,14 +3,12 @@ package com.org.dao;
 
 import java.util.List;
 
-import com.org.person.model.Person;
-
 /**
  * 
  * A Renseigner.
  * @author  : admin
  * @project : person
- * @package : com.org.person.dao
+ * @package : com.org.dao
  * @date    : 10 sept. 2016 09:32:32
  */
 public interface ObjectDao<T>
@@ -20,7 +18,7 @@ public interface ObjectDao<T>
     * @param primaryKey
     * @return
     */
-   Person findById( Integer primaryKey );
+   T findById( Integer primaryKey );
    
    /**
     * 
@@ -46,17 +44,17 @@ public interface ObjectDao<T>
    
    /**
     * 
-    * @param person
+    * @param t
     * @return
     */
-   T save( Person person );
+   T save( T t );
    
    /**
     * 
-    * @param person
+    * @param t
     * @return
     */
-   T update( T person );
+   T update( T t );
    
    /**
    * 
@@ -77,8 +75,8 @@ public interface ObjectDao<T>
    
    /**
     * 
-    * @param person
+    * @param t
     * @return
     */
-   boolean isExist( T person );
+   boolean isExist( T t );
 }

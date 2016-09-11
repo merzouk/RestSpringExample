@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.org.person.model.Person;
+import com.org.person.entity.PersonEntity;
 import com.org.person.service.PersonService;
 
 /**
@@ -44,15 +44,15 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/persons/", method = RequestMethod.GET)
-   public ResponseEntity<List<Person>> listAllPersons()
+   public ResponseEntity<List<PersonEntity>> listAllPersons()
    {
       logger.info( "listAllPersons" );
-      List<Person> persons = personService.findAllPersons();
+      List<PersonEntity> persons = personService.findAllPersons();
       if( persons.isEmpty() )
       {
-         return new ResponseEntity<List<Person>>( new ArrayList<Person>(), HttpStatus.OK );
+         return new ResponseEntity<List<PersonEntity>>( new ArrayList<PersonEntity>(), HttpStatus.OK );
       }
-      return new ResponseEntity<List<Person>>( persons, HttpStatus.OK );
+      return new ResponseEntity<List<PersonEntity>>( persons, HttpStatus.OK );
    }
    
    /**
@@ -61,16 +61,16 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/getPersonById/{primaryKey}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<Person> getPersonById( @PathVariable("primaryKey") Integer primaryKey )
+   public ResponseEntity<PersonEntity> getPersonById( @PathVariable("primaryKey") Integer primaryKey )
    {
       logger.info( "Fetching Person with primaryKey " + primaryKey );
-      Person person = personService.findById( primaryKey );
+      PersonEntity person = personService.findById( primaryKey );
       if( person == null )
       {
          logger.info( "Person with primaryKey " + primaryKey + " not found" );
-         return new ResponseEntity<Person>( HttpStatus.NOT_FOUND );
+         return new ResponseEntity<PersonEntity>( HttpStatus.NOT_FOUND );
       }
-      return new ResponseEntity<Person>( person, HttpStatus.OK );
+      return new ResponseEntity<PersonEntity>( person, HttpStatus.OK );
    }
    
    /**
@@ -79,16 +79,16 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/getPersonByEmail/{email}/{domain}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<Person> getPersonByEmail( @PathVariable("email") String email, @PathVariable("domain") String domain )
+   public ResponseEntity<PersonEntity> getPersonByEmail( @PathVariable("email") String email, @PathVariable("domain") String domain )
    {
       logger.info( "Fetching Person with email " + email + "." + domain );
-      Person person = personService.findByEmail( email + "." + domain );
+      PersonEntity person = personService.findByEmail( email + "." + domain );
       if( person == null )
       {
          logger.info( "Person with email " + email + " not found" );
-         return new ResponseEntity<Person>( HttpStatus.NOT_FOUND );
+         return new ResponseEntity<PersonEntity>( HttpStatus.NOT_FOUND );
       }
-      return new ResponseEntity<Person>( person, HttpStatus.OK );
+      return new ResponseEntity<PersonEntity>( person, HttpStatus.OK );
    }
    
    /**
@@ -97,16 +97,16 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/getPersonByLastName/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<List<Person>> getPersonByLastName( @PathVariable("lastName") String lastName )
+   public ResponseEntity<List<PersonEntity>> getPersonByLastName( @PathVariable("lastName") String lastName )
    {
       logger.info( "Fetching Person with lastName " + lastName );
-      List<Person> persons = personService.findByLastName( lastName );
+      List<PersonEntity> persons = personService.findByLastName( lastName );
       if( persons == null || persons.size() == 0 )
       {
          logger.info( "Person with lastName " + lastName + " not found" );
-         return new ResponseEntity<List<Person>>( new ArrayList<Person>(), HttpStatus.OK );
+         return new ResponseEntity<List<PersonEntity>>( new ArrayList<PersonEntity>(), HttpStatus.OK );
       }
-      return new ResponseEntity<List<Person>>( persons, HttpStatus.OK );
+      return new ResponseEntity<List<PersonEntity>>( persons, HttpStatus.OK );
    }
    
    /**
@@ -115,16 +115,16 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/getPersonByFirstAndLastName/{lastName}/{firstName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<List<Person>> getPersonByFirstAndLastName( @PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName )
+   public ResponseEntity<List<PersonEntity>> getPersonByFirstAndLastName( @PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName )
    {
       logger.info( "Fetching Person with lastName " + lastName + " and firstName " + firstName );
-      List<Person> persons = personService.findByFirstNameAndLastName( lastName, firstName );
+      List<PersonEntity> persons = personService.findByFirstNameAndLastName( lastName, firstName );
       if( persons == null || persons.size() == 0 )
       {
          logger.info( "Person with lastName " + lastName + " not found" );
-         return new ResponseEntity<List<Person>>( new ArrayList<Person>(), HttpStatus.OK );
+         return new ResponseEntity<List<PersonEntity>>( new ArrayList<PersonEntity>(), HttpStatus.OK );
       }
-      return new ResponseEntity<List<Person>>( persons, HttpStatus.OK );
+      return new ResponseEntity<List<PersonEntity>>( persons, HttpStatus.OK );
    }
    
    /**
@@ -134,7 +134,7 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/createPerson/", method = RequestMethod.POST)
-   public ResponseEntity<Person> createPerson( @RequestBody Person person )
+   public ResponseEntity<PersonEntity> createPerson( @RequestBody PersonEntity person )
    {
       logger.info( "Creating Person  " + person.toString() );
       String email = person.getEmail();
@@ -142,10 +142,10 @@ public class PersonController
       person = personService.savePerson( person );
       if( person != null )
       {
-         return new ResponseEntity<Person>( person, HttpStatus.OK );
+         return new ResponseEntity<PersonEntity>( person, HttpStatus.OK );
       }
       logger.info( "A Person with email " + email + " already exist " );
-      return new ResponseEntity<Person>( HttpStatus.CONFLICT );
+      return new ResponseEntity<PersonEntity>( HttpStatus.CONFLICT );
    }
    
    /**
@@ -155,20 +155,20 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/updatePerson/{primaryKey}", method = RequestMethod.PUT)
-   public ResponseEntity<Person> updatePerson( @PathVariable("primaryKey") Integer primaryKey, @RequestBody Person person )
+   public ResponseEntity<PersonEntity> updatePerson( @PathVariable("primaryKey") Integer primaryKey, @RequestBody PersonEntity person )
    {
       logger.info( "Updating Person " + primaryKey );
-      Person currentPerson = personService.findById( primaryKey );
+      PersonEntity currentPerson = personService.findById( primaryKey );
       if( currentPerson == null )
       {
          logger.info( "Person with primaryKey " + primaryKey + " not found" );
-         return new ResponseEntity<Person>( HttpStatus.NOT_FOUND );
+         return new ResponseEntity<PersonEntity>( HttpStatus.NOT_FOUND );
       }
       currentPerson.setFirstName( person.getFirstName() );
       currentPerson.setLastName( person.getLastName() );
       currentPerson.setEmail( person.getEmail() );
       personService.updatePerson( currentPerson );
-      return new ResponseEntity<Person>( currentPerson, HttpStatus.OK );
+      return new ResponseEntity<PersonEntity>( currentPerson, HttpStatus.OK );
    }
    
    /**
@@ -177,17 +177,17 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/deletePersonById/{primaryKey}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<Person> deletePersonById( @PathVariable("primaryKey") Integer primaryKey )
+   public ResponseEntity<PersonEntity> deletePersonById( @PathVariable("primaryKey") Integer primaryKey )
    {
       logger.info( "Fetching & Deleting Person with id " + primaryKey );
-      Person person = personService.findById( primaryKey );
+      PersonEntity person = personService.findById( primaryKey );
       if( person == null )
       {
          logger.info( "Unable to delete. Person with id " + primaryKey + " not found" );
-         return new ResponseEntity<Person>( HttpStatus.NOT_FOUND );
+         return new ResponseEntity<PersonEntity>( HttpStatus.NOT_FOUND );
       }
       personService.deletePersonById( primaryKey );
-      return new ResponseEntity<Person>( new Person(), HttpStatus.OK );
+      return new ResponseEntity<PersonEntity>( new PersonEntity(), HttpStatus.OK );
    }
    
    /**
@@ -195,10 +195,10 @@ public class PersonController
     * @return
     */
    @RequestMapping(value = "/deleteAllpersons/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<Person> deleteAllPersons()
+   public ResponseEntity<PersonEntity> deleteAllPersons()
    {
       logger.info( "Deleting All Persons" );
       personService.deleteAllPersons();
-      return new ResponseEntity<Person>( new Person(), HttpStatus.OK );
+      return new ResponseEntity<PersonEntity>( new PersonEntity(), HttpStatus.OK );
    }
 }

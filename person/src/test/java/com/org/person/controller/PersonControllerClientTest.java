@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
-import com.org.person.model.Person;
+import com.org.person.entity.PersonEntity;
 
 /**
  * 
@@ -88,7 +88,7 @@ public class PersonControllerClientTest
    {
       logger.info( "Testing getPerson API" );
       RestTemplate restTemplate = new RestTemplate();
-      Person person = restTemplate.getForObject( REST_SERVICE_URI + "/getPersonById/" + primaryKey, Person.class );
+      PersonEntity person = restTemplate.getForObject( REST_SERVICE_URI + "/getPersonById/" + primaryKey, PersonEntity.class );
       logger.info( "" + person.toString() );
    }
    
@@ -99,8 +99,8 @@ public class PersonControllerClientTest
    {
       logger.info( "Testing create Person API" );
       RestTemplate restTemplate = new RestTemplate();
-      Person person = new Person( null, generateStringRandom( 20 ), generateStringRandom( 20 ), generateStringRandom( 20 ) + "@courriel.com" );
-      URI uri = restTemplate.postForLocation( REST_SERVICE_URI + "/createPerson/", person, Person.class );
+      PersonEntity person = new PersonEntity( null, generateStringRandom( 20 ), generateStringRandom( 20 ), generateStringRandom( 20 ) + "@courriel.com" );
+      URI uri = restTemplate.postForLocation( REST_SERVICE_URI + "/createPerson/", person, PersonEntity.class );
       if( uri != null )
       {
          logger.info( "Location : " + uri.toASCIIString() );
@@ -131,7 +131,7 @@ public class PersonControllerClientTest
    {
       logger.info( "Testing update Person API" );
       RestTemplate restTemplate = new RestTemplate();
-      Person person = new Person( null, generateStringRandom( 20 ), generateStringRandom( 20 ), generateStringRandom( 20 ) + "@courriel.com" );
+      PersonEntity person = new PersonEntity( null, generateStringRandom( 20 ), generateStringRandom( 20 ), generateStringRandom( 20 ) + "@courriel.com" );
       restTemplate.put( REST_SERVICE_URI + "/updatePerson/" + primaryKey, person );
       logger.info( "" + person.toString() );
    }
