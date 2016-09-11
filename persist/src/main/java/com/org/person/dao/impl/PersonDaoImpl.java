@@ -12,14 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.org.dao.ObjectDao;
+import com.org.person.dao.PersonDao;
 import com.org.person.entity.PersonEntity;
 import com.org.tools.ConstantesUtils;
 import com.org.tools.Utils;
 
-@Repository("objectDao")
+@Repository("personDao")
 @Transactional
-public class PersonDaoImpl implements ObjectDao<PersonEntity>
+public class PersonDaoImpl implements PersonDao<PersonEntity>
 {
    
    private static final Logger logger = LoggerFactory.getLogger( PersonDaoImpl.class );

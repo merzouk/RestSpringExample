@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.org.dao.ObjectDao;
+import com.org.person.dao.PersonDao;
 import com.org.person.entity.PersonEntity;
 import com.org.person.service.PersonService;
 
@@ -15,7 +15,7 @@ public class PersonServiceImpl implements PersonService
 {
    
    @Autowired
-   private ObjectDao<PersonEntity> personDao;
+   private PersonDao<PersonEntity> personDao;
    
    /**
     * 

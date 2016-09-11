@@ -40,7 +40,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.org.dao.ObjectDao;
 import com.org.person.entity.PersonEntity;
 
 /**
@@ -60,7 +59,7 @@ public class PersonDaoTest
    private static final Logger logger = LoggerFactory.getLogger( PersonDaoTest.class );
    
    @Autowired
-   private ObjectDao<PersonEntity>           objectDao;
+   private PersonDao<PersonEntity> personDao;
    
    @Test
    public void test_1()
@@ -77,7 +76,7 @@ public class PersonDaoTest
        * 
        */
       logger.info( "save test" );
-      p = objectDao.save( p );
+      p = personDao.save( p );
       Integer id = p.getId();
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
@@ -85,7 +84,7 @@ public class PersonDaoTest
       /**
        * 
        */
-      List<PersonEntity> list = objectDao.findByLastName( lastName );
+      List<PersonEntity> list = personDao.findByLastName( lastName );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
@@ -96,7 +95,7 @@ public class PersonDaoTest
       /**
        * 
        */
-      p = objectDao.findByEmail( email + "@email.com" );
+      p = personDao.findByEmail( email + "@email.com" );
       Assert.assertNotNull( p );
       Assert.assertNotNull( p.getId() );
       Assert.assertEquals( primaryKey, p.getId() );
@@ -106,7 +105,7 @@ public class PersonDaoTest
       /**
        * 
        */
-      list = objectDao.findByFirstNameAndLastName( lastName, firstName );
+      list = personDao.findByFirstNameAndLastName( lastName, firstName );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
@@ -118,7 +117,7 @@ public class PersonDaoTest
       * 
       */
       logger.info( "get by id test" );
-      p = objectDao.findById( primaryKey );
+      p = personDao.findById( primaryKey );
       Assert.assertNotNull( "Person not found!", p );
       Assert.assertEquals( primaryKey, p.getId() );
       Assert.assertEquals( email + "@email.com", p.getEmail() );
@@ -129,12 +128,12 @@ public class PersonDaoTest
        */
       email = email + "_1@email.com";
       p.setEmail( email );
-      objectDao.update( p );
+      personDao.update( p );
       /**
        * 
        */
       logger.info( "get by id test" );
-      p = objectDao.findById( primaryKey );
+      p = personDao.findById( primaryKey );
       Assert.assertNotNull( "Person not found!", p );
       Assert.assertEquals( primaryKey, p.getId() );
       Assert.assertEquals( email, p.getEmail() );
@@ -144,7 +143,7 @@ public class PersonDaoTest
        * 
        */
       logger.info( "load list test" );
-      list = objectDao.findAll();
+      list = personDao.findAll();
       Assert.assertEquals( 1, list.size() );
       /**
        * 
@@ -155,7 +154,7 @@ public class PersonDaoTest
       lastName = generateStringRandom( 10 );
       p.setLastName( lastName );
       p.setEmail( email );
-      p = objectDao.save( p );
+      p = personDao.save( p );
       Assert.assertNull( p );
    }
    

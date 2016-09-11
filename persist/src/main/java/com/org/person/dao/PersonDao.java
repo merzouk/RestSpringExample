@@ -14,8 +14,8 @@
  * Administrateur.
  *-------------------------------------------------------- 
  * 
- * Fichier 		:	Utils.java
- * Cree le 		: 	11 sept. 2016 à 11:49:10
+ * Fichier 		:	PersonDao.java
+ * Cree le 		: 	11 sept. 2016 à 15:52:25
  * Auteur		: 	admin
  * 
  * Description 	:
@@ -23,27 +23,40 @@
  *---------------------------------------------------------
  */
 
-package com.org.tools;
+package com.org.person.dao;
+
+import java.util.List;
+
+import com.org.dao.ObjectDao;
 
 /**
  * A Renseigner.
  * @author  : admin
  * @project : persist
- * @package : com.org.tools
- * @date    : 11 sept. 2016 11:49:10
+ * @package : com.org.dao
+ * @date    : 11 sept. 2016 15:52:25
  */
-public class Utils
+public interface PersonDao<T> extends ObjectDao<T>
 {
+   /**
+    * 
+    * @param lastName
+    * @return
+    */
+   List<T> findByLastName( String lastName );
+   
    /**
     * 
     * @param email
     * @return
     */
-   public static boolean isValidEmailAddress( String email )
-   {
-      String emailPatternExpression = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-      java.util.regex.Pattern pattern = java.util.regex.Pattern.compile( emailPatternExpression );
-      java.util.regex.Matcher matcher = pattern.matcher( email );
-      return matcher.matches();
-   }
+   T findByEmail( String email );
+   
+   /**
+    * 
+    * @param lastName
+    * @param firstName
+    * @return
+    */
+   List<T> findByFirstNameAndLastName( String lastName, String firstName );
 }

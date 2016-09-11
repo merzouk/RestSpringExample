@@ -11,7 +11,7 @@ import java.util.List;
  * @package : com.org.dao
  * @date    : 10 sept. 2016 09:32:32
  */
-public interface ObjectDao<T>
+public interface ObjectDao<T> 
 {
    /**
     * 
@@ -19,28 +19,6 @@ public interface ObjectDao<T>
     * @return
     */
    T findById( Integer primaryKey );
-   
-   /**
-    * 
-    * @param lastName
-    * @return
-    */
-   List<T> findByLastName( String lastName );
-   
-   /**
-    * 
-    * @param email
-    * @return
-    */
-   T findByEmail( String email );
-   
-   /**
-    * 
-    * @param lastName
-    * @param firstName
-    * @return
-    */
-   List<T> findByFirstNameAndLastName( String lastName, String firstName );
    
    /**
     * 
