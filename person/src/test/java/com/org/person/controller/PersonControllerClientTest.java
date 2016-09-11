@@ -26,7 +26,6 @@ import com.org.person.entity.PersonEntity;
  * @package : com.org
  * @date    : 10 sept. 2016 09:22:02
  */
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PersonControllerClientTest
 {
@@ -186,20 +185,35 @@ public class PersonControllerClientTest
       getPerson( 4 );
       createPerson();
       getPerson( 5 );
+   }
+   
+   @Test
+   public void test_2() throws Exception
+   {
       int actual = listAllPersons();
       Assert.assertEquals( 5, actual );
       getPerson( 1 );
+   }
+   
+   @Test
+   public void test_3() throws Exception
+   {
       createPerson();
-      actual = listAllPersons();
+      int actual = listAllPersons();
       Assert.assertEquals( 6, actual );
+   }
+   
+   @Test
+   public void test_4()
+   {
       updatePerson( 3 );
       deletePerson( 4 );
-      actual = listAllPersons();
+      int actual = listAllPersons();
       Assert.assertEquals( 5, actual );
    }
    
    @Test(expected = Exception.class)
-   public void test_2() throws Exception
+   public void test_5() throws Exception
    {
       getPerson( 4 );
    }
