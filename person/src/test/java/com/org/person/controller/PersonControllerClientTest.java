@@ -7,15 +7,16 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
 import com.org.person.entity.PersonEntity;
-
-import org.junit.Assert;
 
 /**
  * 
@@ -25,6 +26,8 @@ import org.junit.Assert;
  * @package : com.org
  * @date    : 10 sept. 2016 09:22:02
  */
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PersonControllerClientTest
 {
    
@@ -88,11 +91,18 @@ public class PersonControllerClientTest
    /**
     * GET
     */
-   private static void getPerson( Integer primaryKey )
+   private static void getPerson( Integer primaryKey ) throws Exception
    {
       logger.info( "Testing getPerson API" );
       RestTemplate restTemplate = new RestTemplate();
       PersonEntity person = restTemplate.getForObject( REST_SERVICE_URI + "/getPersonById/" + primaryKey, PersonEntity.class );
+      if( person == null )
+      {
+         throw new Exception( "Null" );
+      }
+      Assert.assertNotNull( person );
+      Assert.assertTrue( person.getId().intValue() > 0 );
+      Assert.assertEquals( primaryKey, person.getId() );
       logger.info( "" + person.toString() );
    }
    
@@ -164,13 +174,18 @@ public class PersonControllerClientTest
    }
    
    @Test
-   public void allTest()
+   public void test_1() throws Exception
    {
       createPerson();
+      getPerson( 1 );
       createPerson();
+      getPerson( 2 );
       createPerson();
+      getPerson( 3 );
       createPerson();
+      getPerson( 4 );
       createPerson();
+      getPerson( 5 );
       int actual = listAllPersons();
       Assert.assertEquals( 5, actual );
       getPerson( 1 );
@@ -181,5 +196,11 @@ public class PersonControllerClientTest
       deletePerson( 4 );
       actual = listAllPersons();
       Assert.assertEquals( 5, actual );
+   }
+   
+   @Test(expected = Exception.class)
+   public void test_2() throws Exception
+   {
+      getPerson( 4 );
    }
 }
