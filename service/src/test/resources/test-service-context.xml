@@ -13,6 +13,6 @@
 	<import resource="test-service-db.xml" />
 
 	<tx:annotation-driven />
-	<context:component-scan base-package="com.org.person" />
+	<context:component-scan base-package="com.org" />
 
 </beans>

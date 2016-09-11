@@ -10,12 +10,12 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.org.person.dao.PersonDao;
+import com.org.dao.ObjectDao;
 import com.org.person.model.Person;
 
-@Repository("personDao")
+@Repository("objectDao")
 @Transactional
-public class PersonDaoImpl implements PersonDao
+public class PersonDaoImpl implements ObjectDao<Person>
 {
    
    @PersistenceContext
@@ -23,10 +23,10 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#findAllPersons()
+    * @see com.org.dao.ObjectDao#findAll()
     */
    @SuppressWarnings("unchecked")
-   public List<Person> findAllPersons()
+   public List<Person> findAll()
    {
       List<Person> list = entityManager.createQuery( "select p from Person p" ).getResultList();
       return list;
@@ -34,7 +34,7 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#findById(java.lang.Integer)
+    * @see com.org.dao.ObjectDao#findById(java.lang.Integer)
     */
    public Person findById( Integer primaryKey )
    {
@@ -47,7 +47,7 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#findByLastName(java.lang.String)
+    * @see com.org.dao.ObjectDao#findByLastName(java.lang.String)
     */
    @SuppressWarnings("unchecked")
    public List<Person> findByLastName( String lastName )
@@ -61,7 +61,7 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#findByEmail(java.lang.String)
+    * @see com.org.dao.ObjectDao#findByEmail(java.lang.String)
     */
    public Person findByEmail( String email )
    {
@@ -87,7 +87,7 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#findByLastName(java.lang.String)
+    * @see com.org.dao.ObjectDao#findByLastName(java.lang.String)
     */
    @SuppressWarnings("unchecked")
    public List<Person> findByFirstNameAndLastName( String lastName, String firstName )
@@ -101,10 +101,10 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#savePerson(com.org.person.model.Person)
+    * @see com.org.dao.ObjectDao#save(com.org.person.model.Person)
     */
    @Transactional
-   public Person savePerson( Person person )
+   public Person save( Person person )
    {
       if( !validatePerson( person ) )
       {
@@ -149,10 +149,10 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#updatePerson(com.org.person.model.Person)
+    * @see com.org.dao.ObjectDao#update(com.org.person.model.Person)
     */
    @Transactional
-   public Person updatePerson( Person person )
+   public Person update( Person person )
    {
       if( person != null && person.getId() != null && person.getId().intValue() > 0 )
       {
@@ -163,10 +163,10 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#deletePersonById(long)
+    * @see com.org.dao.ObjectDao#deleteById(long)
     */
    @Transactional
-   public void deletePersonById( Integer primaryKey )
+   public void deleteById( Integer primaryKey )
    {
       
       if( primaryKey == null || primaryKey.intValue() <= 0 )
@@ -182,26 +182,26 @@ public class PersonDaoImpl implements PersonDao
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#isPersonExist(com.org.person.model.Person)
+    * @see com.org.dao.ObjectDao#isExist(com.org.person.model.Person)
     */
-   public boolean isPersonExist( Person person )
+   public boolean isExist( Person person )
    {
       return findByLastName( person.getLastName() ) != null;
    }
    
    /**
     * 
-    * @see com.org.person.dao.PersonDao#deleteAllPersons()
+    * @see com.org.dao.ObjectDao#deleteAll()
     */
    @Transactional
-   public void deleteAllPersons()
+   public void deleteAll()
    {
-      List<Person> list = findAllPersons();
+      List<Person> list = findAll();
       if( list != null && list.size() > 0 )
       {
          for( Person person : list )
          {
-            deletePersonById( person.getId() );
+            deleteById( person.getId() );
          }
       }
    }

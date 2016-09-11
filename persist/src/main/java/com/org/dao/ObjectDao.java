@@ -1,5 +1,5 @@
 
-package com.org.person.service;
+package com.org.dao;
 
 import java.util.List;
 
@@ -10,14 +10,14 @@ import com.org.person.model.Person;
  * A Renseigner.
  * @author  : admin
  * @project : person
- * @package : com.org.service
- * @date    : 10 sept. 2016 09:18:48
+ * @package : com.org.person.dao
+ * @date    : 10 sept. 2016 09:32:32
  */
-public interface PersonService
+public interface ObjectDao<T>
 {
    /**
     * 
-    * @param id
+    * @param primaryKey
     * @return
     */
    Person findById( Integer primaryKey );
@@ -27,14 +27,14 @@ public interface PersonService
     * @param lastName
     * @return
     */
-   List<Person> findByLastName( String lastName );
+   List<T> findByLastName( String lastName );
    
    /**
     * 
     * @param email
     * @return
     */
-   Person findByEmail( String email );
+   T findByEmail( String email );
    
    /**
     * 
@@ -42,41 +42,43 @@ public interface PersonService
     * @param firstName
     * @return
     */
-   List<Person> findByFirstNameAndLastName( String lastName, String firstName );
-   
-   /**
-    * 
-    * @param person
-    */
-   Person savePerson( Person person );
-   
-   /**
-    * 
-    * @param person
-    */
-   Person updatePerson( Person person );
-   
-   /**
-    * 
-    * @param id
-    */
-   void deletePersonById( Integer primaryKey );
-   
-   /**
-    * 
-    * @return
-    */
-   List<Person> findAllPersons();
-   
-   /**
-    * 
-    */
-   void deleteAllPersons();
+   List<T> findByFirstNameAndLastName( String lastName, String firstName );
    
    /**
     * 
     * @param person
     * @return
     */
-   public boolean isPersonExist( Person person );
+   T save( Person person );
+   
+   /**
+    * 
+    * @param person
+    * @return
+    */
+   T update( T person );
+   
+   /**
+   * 
+   * @param primaryKey
+   */
+   void deleteById( Integer primaryKey );
+   
+   /**
+    * 
+    * @return
+    */
+   List<T> findAll();
+   
+   /**
+    * 
+    */
+   void deleteAll();
+   
+   /**
+    * 
+    * @param person
+    * @return
+    */
+   boolean isExist( T person );
 }

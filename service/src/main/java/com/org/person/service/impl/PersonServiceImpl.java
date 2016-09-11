@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.org.person.dao.PersonDao;
+import com.org.dao.ObjectDao;
 import com.org.person.model.Person;
 import com.org.person.service.PersonService;
 
@@ -15,7 +15,7 @@ public class PersonServiceImpl implements PersonService
 {
    
    @Autowired
-   private PersonDao personDao;
+   private ObjectDao<Person> personDao;
    
    /**
     * 
@@ -23,7 +23,7 @@ public class PersonServiceImpl implements PersonService
     */
    public List<Person> findAllPersons()
    {
-      return personDao.findAllPersons();
+      return personDao.findAll();
    }
    
    /**
@@ -50,7 +50,7 @@ public class PersonServiceImpl implements PersonService
     */
    public Person savePerson( Person person )
    {
-      return personDao.savePerson( person );
+      return personDao.save( person );
    }
    
    /**
@@ -59,7 +59,7 @@ public class PersonServiceImpl implements PersonService
     */
    public Person updatePerson( Person person )
    {
-      return personDao.updatePerson( person );
+      return personDao.update( person );
    }
    
    /**
@@ -68,7 +68,7 @@ public class PersonServiceImpl implements PersonService
     */
    public void deletePersonById( Integer primaryKey )
    {
-      personDao.deletePersonById( primaryKey );
+      personDao.deleteById( primaryKey );
    }
    
    /**
@@ -94,7 +94,7 @@ public class PersonServiceImpl implements PersonService
     */
    public void deleteAllPersons()
    {
-      personDao.deleteAllPersons();
+      personDao.deleteAll();
    }
    
    /**

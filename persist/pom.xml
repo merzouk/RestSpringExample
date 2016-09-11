@@ -6,7 +6,7 @@
 	<name>person Maven Webapp</name>
 
 	<parent>
-		<groupId>com.org.person</groupId>
+		<groupId>com.org</groupId>
 		<artifactId>project</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
