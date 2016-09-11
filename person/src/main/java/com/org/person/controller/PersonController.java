@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.org.Controller;
 import com.org.person.entity.PersonEntity;
 import com.org.person.service.PersonService;
 
@@ -28,23 +29,20 @@ import com.org.person.service.PersonService;
  * @date    : 10 sept. 2016 09:20:30
  */
 @RestController
-public class PersonController
+public class PersonController implements Controller<PersonEntity>
 {
    
    private static final Logger logger = LoggerFactory.getLogger( PersonController.class );
    
-   /**
-    * Service which will do all data retrieval/manipulation work
-    */
    @Autowired
    private PersonService       personService;
    
    /**
-    * Retrieve All Persons
-    * @return
-    */
+   * 
+   * @see com.org.Controller#listAll()
+   */
    @RequestMapping(value = "/persons/", method = RequestMethod.GET)
-   public ResponseEntity<List<PersonEntity>> listAllPersons()
+   public ResponseEntity<List<PersonEntity>> listAll()
    {
       logger.info( "listAllPersons" );
       List<PersonEntity> persons = personService.findAllPersons();
@@ -56,12 +54,11 @@ public class PersonController
    }
    
    /**
-    * Retrieve Single Person
-    * @param id
-    * @return
-    */
+   * 
+   * @see com.org.Controller#getById(java.lang.Integer)
+   */
    @RequestMapping(value = "/getPersonById/{primaryKey}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<PersonEntity> getPersonById( @PathVariable("primaryKey") Integer primaryKey )
+   public ResponseEntity<PersonEntity> getById( @PathVariable("primaryKey") Integer primaryKey )
    {
       logger.info( "Fetching Person with primaryKey " + primaryKey );
       PersonEntity person = personService.findById( primaryKey );
@@ -74,12 +71,11 @@ public class PersonController
    }
    
    /**
-    * Retrieve Single Person
-    * @param id
-    * @return
-    */
+   * 
+   * @see com.org.Controller#getByEmail(java.lang.String, java.lang.String)
+   */
    @RequestMapping(value = "/getPersonByEmail/{email}/{domain}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<PersonEntity> getPersonByEmail( @PathVariable("email") String email, @PathVariable("domain") String domain )
+   public ResponseEntity<PersonEntity> getByEmail( @PathVariable("email") String email, @PathVariable("domain") String domain )
    {
       logger.info( "Fetching Person with email " + email + "." + domain );
       PersonEntity person = personService.findByEmail( email + "." + domain );
@@ -92,12 +88,11 @@ public class PersonController
    }
    
    /**
-    * 
-    * @param lastName
-    * @return
-    */
+   * 
+   * @see com.org.Controller#getByLastName(java.lang.String)
+   */
    @RequestMapping(value = "/getPersonByLastName/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<List<PersonEntity>> getPersonByLastName( @PathVariable("lastName") String lastName )
+   public ResponseEntity<List<PersonEntity>> getByLastName( @PathVariable("lastName") String lastName )
    {
       logger.info( "Fetching Person with lastName " + lastName );
       List<PersonEntity> persons = personService.findByLastName( lastName );
@@ -110,14 +105,13 @@ public class PersonController
    }
    
    /**
-    * 
-    * @param lastName
-    * @return
-    */
+   * 
+   * @see com.org.Controller#getByFirstAndLastName(java.lang.String, java.lang.String)
+   */
    @RequestMapping(value = "/getPersonByFirstAndLastName/{lastName}/{firstName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<List<PersonEntity>> getPersonByFirstAndLastName( @PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName )
+   public ResponseEntity<List<PersonEntity>> getByFirstAndLastName( @PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName )
    {
-      logger.info( "Fetching Person with lastName " + lastName + " and firstName " + firstName );
+      logger.info( "get Persons with lastName " + lastName + " and firstName " + firstName );
       List<PersonEntity> persons = personService.findByFirstNameAndLastName( lastName, firstName );
       if( persons == null || persons.size() == 0 )
       {
@@ -128,13 +122,11 @@ public class PersonController
    }
    
    /**
-    * Create a Person
-    * @param person
-    * @param ucBuilder
-    * @return
-    */
+   * 
+   * @see com.org.Controller#create(java.lang.Object)
+   */
    @RequestMapping(value = "/createPerson/", method = RequestMethod.POST)
-   public ResponseEntity<PersonEntity> createPerson( @RequestBody PersonEntity person )
+   public ResponseEntity<PersonEntity> create( @RequestBody PersonEntity person )
    {
       logger.info( "Creating Person  " + person.toString() );
       String email = person.getEmail();
@@ -149,13 +141,11 @@ public class PersonController
    }
    
    /**
-    * Update a Person
-    * @param id
-    * @param person
-    * @return
+    * 
+    * @see com.org.Controller#update(java.lang.Integer, java.lang.Object)
     */
    @RequestMapping(value = "/updatePerson/{primaryKey}", method = RequestMethod.PUT)
-   public ResponseEntity<PersonEntity> updatePerson( @PathVariable("primaryKey") Integer primaryKey, @RequestBody PersonEntity person )
+   public ResponseEntity<PersonEntity> update( @PathVariable("primaryKey") Integer primaryKey, @RequestBody PersonEntity person )
    {
       logger.info( "Updating Person " + primaryKey );
       PersonEntity currentPerson = personService.findById( primaryKey );
@@ -172,14 +162,13 @@ public class PersonController
    }
    
    /**
-    * Delete a Person 
-    * @param primaryKey
-    * @return
-    */
+   * 
+   * @see com.org.Controller#deleteById(java.lang.Integer)
+   */
    @RequestMapping(value = "/deletePersonById/{primaryKey}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<PersonEntity> deletePersonById( @PathVariable("primaryKey") Integer primaryKey )
+   public ResponseEntity<PersonEntity> deleteById( @PathVariable("primaryKey") Integer primaryKey )
    {
-      logger.info( "Fetching & Deleting Person with id " + primaryKey );
+      logger.info( "get & Deleting Person with id " + primaryKey );
       PersonEntity person = personService.findById( primaryKey );
       if( person == null )
       {
@@ -191,11 +180,11 @@ public class PersonController
    }
    
    /**
-    * Delete All Person 
-    * @return
+    * 
+    * @see com.org.Controller#deleteAll()
     */
    @RequestMapping(value = "/deleteAllpersons/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<PersonEntity> deleteAllPersons()
+   public ResponseEntity<PersonEntity> deleteAll()
    {
       logger.info( "Deleting All Persons" );
       personService.deleteAllPersons();
