@@ -17,6 +17,6 @@ in Directory RestSpringExample, you run : mvn clean install -DskipTests
 
 You deploy the war in your server, the unit test for Rest Service is PersonControllerClientTest.java
 
-Change port value in REST_SERVICE_URI.
+Set port value in REST_SERVICE_URI.
 
 You can test you service Rest by Browser, the uris is in call_service file.
