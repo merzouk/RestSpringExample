@@ -3,6 +3,8 @@ package com.org.person.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import com.org.person.service.PersonService;
 public class PersonServiceImpl implements PersonService
 {
    
+   private static final Logger     logger = LoggerFactory.getLogger( PersonServiceImpl.class );
+   
    @Autowired
    private PersonDao<PersonEntity> personDao;
    
@@ -23,6 +27,7 @@ public class PersonServiceImpl implements PersonService
     */
    public List<PersonEntity> findAllPersons()
    {
+      logger.debug( "findAllPersons" );
       return personDao.findAll();
    }
    
@@ -32,6 +37,7 @@ public class PersonServiceImpl implements PersonService
     */
    public PersonEntity findById( Integer primaryKey )
    {
+      logger.debug( "findById {} ", primaryKey );
       return personDao.findById( primaryKey );
    }
    
@@ -41,6 +47,7 @@ public class PersonServiceImpl implements PersonService
     */
    public List<PersonEntity> findByLastName( String lastName )
    {
+      logger.debug( "findByLastName {} ", lastName );
       return personDao.findByLastName( lastName );
    }
    
@@ -50,6 +57,7 @@ public class PersonServiceImpl implements PersonService
     */
    public PersonEntity savePerson( PersonEntity person )
    {
+      logger.debug( "savePerson  {} ", person.toString() );
       return personDao.save( person );
    }
    
@@ -59,6 +67,7 @@ public class PersonServiceImpl implements PersonService
     */
    public PersonEntity updatePerson( PersonEntity person )
    {
+      logger.debug( "updatePerson  {} ", person.toString() );
       return personDao.update( person );
    }
    
@@ -68,6 +77,7 @@ public class PersonServiceImpl implements PersonService
     */
    public void deletePersonById( Integer primaryKey )
    {
+      logger.debug( "deletePersonById {} ", primaryKey );
       personDao.deleteById( primaryKey );
    }
    
@@ -77,13 +87,14 @@ public class PersonServiceImpl implements PersonService
     */
    public boolean isPersonExist( PersonEntity person )
    {
+      logger.debug( "isPersonExist {} ", person.toString() );
       try
       {
          return ( personDao.findByEmail( person.getEmail() ) != null );
       }
       catch( Exception e )
       {
-         // TODO: handle exception
+         logger.error( "Error during load Person by email  ", e );
       }
       return false;
    }
@@ -94,6 +105,7 @@ public class PersonServiceImpl implements PersonService
     */
    public void deleteAllPersons()
    {
+      logger.debug( "deleteAllPersons" );
       personDao.deleteAll();
    }
    
@@ -103,6 +115,7 @@ public class PersonServiceImpl implements PersonService
     */
    public List<PersonEntity> findByFirstNameAndLastName( String lastName, String firstName )
    {
+      logger.debug( "findByFirstNameAndLastName {} {} ", lastName, firstName );
       return personDao.findByFirstNameAndLastName( lastName, firstName );
    }
    
@@ -112,6 +125,7 @@ public class PersonServiceImpl implements PersonService
     */
    public PersonEntity findByEmail( String email )
    {
+      logger.debug( "findByEmail {} ", email );
       return personDao.findByEmail( email );
    }
 }
