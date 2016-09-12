@@ -108,8 +108,8 @@ public class PersonController implements Controller<PersonEntity>
    * 
    * @see com.org.Controller#getByFirstAndLastName(java.lang.String, java.lang.String)
    */
-   @RequestMapping(value = "/getPersonByFirstAndLastName/{lastName}/{firstName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<List<PersonEntity>> getByFirstAndLastName( @PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName )
+   @RequestMapping(value = "/getPersonByFirstAndLastName/{firstName}/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<PersonEntity>> getByFirstAndLastName(@PathVariable("firstName") String firstName , @PathVariable("lastName") String lastName )
    {
       logger.info( "get Persons with lastName " + lastName + " and firstName " + firstName );
       List<PersonEntity> persons = personService.findByFirstNameAndLastName( lastName, firstName );
