@@ -35,7 +35,15 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    public List<PersonEntity> findAll()
    {
       logger.debug( "findAll" );
-      List<PersonEntity> list = entityManager.createQuery( "select p from Person p" ).getResultList();
+      List<PersonEntity> list = null;
+      try
+      {
+         list = entityManager.createQuery( "select p from Person p" ).getResultList();
+      }
+      catch( Exception e )
+      {
+         logger.error( "Error during load list Person ", e );
+      }
       return list;
    }
    
@@ -50,7 +58,15 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       {
          return null;
       }
-      return entityManager.find( PersonEntity.class, primaryKey );
+      try
+      {
+         return entityManager.find( PersonEntity.class, primaryKey );
+      }
+      catch( Exception e )
+      {
+         logger.error( "Error during load  Person by id {} ", primaryKey, e );
+      }
+      return null;
    }
    
    /**
@@ -65,7 +81,15 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       {
          return new ArrayList<PersonEntity>();
       }
-      return entityManager.createQuery( "select p from Person p where p.lastName = :lastName" ).setParameter( "lastName", lastName ).getResultList();
+      try
+      {
+         return entityManager.createQuery( "select p from Person p where p.lastName = :lastName" ).setParameter( "lastName", lastName ).getResultList();
+      }
+      catch( Exception e )
+      {
+         logger.error( "Error during load  Person by lastName {} ", lastName, e );
+      }
+      return null;
    }
    
    /**
@@ -107,7 +131,15 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       {
          return new ArrayList<PersonEntity>();
       }
-      return entityManager.createQuery( "select p from Person p where p.lastName = :lastName and p.firstName = :firstName" ).setParameter( "lastName", lastName ).setParameter( "firstName", firstName ).getResultList();
+      try
+      {
+         return entityManager.createQuery( "select p from Person p where p.lastName = :lastName and p.firstName = :firstName" ).setParameter( "lastName", lastName ).setParameter( "firstName", firstName ).getResultList();
+      }
+      catch( Exception e )
+      {
+         logger.error( "Error during load  Person by lastName {} firstName {}  ", lastName, firstName, e );
+      }
+      return null;
    }
    
    /**
@@ -124,8 +156,15 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       }
       if( findByEmail( person.getEmail() ) == null )
       {
-         entityManager.persist( person );
-         return person;
+         try
+         {
+            entityManager.persist( person );
+            return person;
+         }
+         catch( Exception e )
+         {
+            logger.error( "Error during save Person {}  ", person.toString(), e );
+         }
       }
       return null;
    }
@@ -140,9 +179,17 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       logger.debug( "update {}", person.toString() );
       if( person != null && person.getId() != null && person.getId().intValue() > 0 )
       {
-         entityManager.merge( person );
+         try
+         {
+            entityManager.merge( person );
+            return person;
+         }
+         catch( Exception e )
+         {
+            logger.error( "Error during update Person {}  ", person.toString(), e );
+         }
       }
-      return person;
+      return null;
    }
    
    /**
@@ -160,7 +207,14 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       PersonEntity entity = findById( primaryKey );
       if( entity != null )
       {
-         entityManager.remove( entity );
+         try
+         {
+            entityManager.remove( entity );
+         }
+         catch( Exception e )
+         {
+            logger.error( "Error during delete Person by primaryKey {}  ", primaryKey, e );
+         }
       }
    }
    
@@ -171,7 +225,15 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    public boolean isExist( PersonEntity person )
    {
       logger.debug( "isExist {}", person.toString() );
-      return findByLastName( person.getLastName() ) != null;
+      try
+      {
+         return findByLastName( person.getLastName() ) != null;
+      }
+      catch( Exception e )
+      {
+         logger.error( "Error during search  Person primaryKey {}  ", person.toString(), e );
+      }
+      return false;
    }
    
    /**

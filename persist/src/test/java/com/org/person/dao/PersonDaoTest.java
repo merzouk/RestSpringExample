@@ -137,10 +137,10 @@ public class PersonDaoTest
       /**
        * 
        */
-      list = personDao.findByFirstNameAndLastName( lastName, firstName );
+      list = personDao.findByFirstNameAndLastName(firstName, lastName  );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
-      Assert.assertNotNull( id );
+      Assert.assertNotNull( p.getId() );
       primaryKey = 1;
       Assert.assertEquals( primaryKey, id );
       Assert.assertEquals( email + "@email.com", p.getEmail() );

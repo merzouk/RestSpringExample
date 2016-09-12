@@ -107,7 +107,7 @@ public class PersonDaoTest
       /**
        * 
        */
-      list = personDao.findByFirstNameAndLastName( lastName, firstName );
+      list = personDao.findByFirstNameAndLastName(firstName, lastName );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
+import com.org.exception.PersonException;
 import com.org.person.entity.PersonEntity;
 
 /**
@@ -34,7 +35,7 @@ public class PersonControllerClientTest
    
    public static final String  REST_SERVICE_URI = "http://localhost:8585/person/gestionPersonnel/";
    
-   private static final int LENGTH = 10;
+   private static final int    LENGTH           = 10;
    
    @Before
    public void init()
@@ -92,14 +93,14 @@ public class PersonControllerClientTest
    /**
     * GET
     */
-   private static void getPerson( Integer primaryKey ) throws Exception
+   private static void getPerson( Integer primaryKey ) throws PersonException
    {
       logger.info( "Testing getPerson API" );
       RestTemplate restTemplate = new RestTemplate();
       PersonEntity person = restTemplate.getForObject( REST_SERVICE_URI + "/getPersonById/" + primaryKey, PersonEntity.class );
       if( person == null )
       {
-         throw new Exception( "Null" );
+         throw new PersonException( "Not load Person by id = " + primaryKey );
       }
       Assert.assertNotNull( person );
       Assert.assertTrue( person.getId().intValue() > 0 );
@@ -175,7 +176,7 @@ public class PersonControllerClientTest
    }
    
    @Test
-   public void test_1() throws Exception
+   public void test_1() throws PersonException
    {
       createPerson();
       getPerson( 1 );
@@ -190,7 +191,7 @@ public class PersonControllerClientTest
    }
    
    @Test
-   public void test_2() throws Exception
+   public void test_2() throws PersonException
    {
       int actual = listAllPersons();
       Assert.assertEquals( 5, actual );
@@ -198,7 +199,7 @@ public class PersonControllerClientTest
    }
    
    @Test
-   public void test_3() throws Exception
+   public void test_3() throws PersonException
    {
       createPerson();
       int actual = listAllPersons();
@@ -214,8 +215,8 @@ public class PersonControllerClientTest
       Assert.assertEquals( 5, actual );
    }
    
-   @Test(expected = Exception.class)
-   public void test_5() throws Exception
+   @Test(expected = PersonException.class)
+   public void test_5() throws PersonException
    {
       getPerson( 4 );
    }

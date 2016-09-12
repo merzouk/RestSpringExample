@@ -107,7 +107,7 @@ public class PersonServiceTest
       /**
        * 
        */
-      list = personService.findByFirstNameAndLastName( lastName, firstName );
+      list = personService.findByFirstNameAndLastName(firstName, lastName );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
