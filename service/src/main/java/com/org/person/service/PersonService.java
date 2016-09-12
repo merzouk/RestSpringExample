@@ -42,7 +42,7 @@ public interface PersonService
     * @param firstName
     * @return
     */
-   List<PersonEntity> findByFirstNameAndLastName( String lastName, String firstName );
+   List<PersonEntity> findByFirstNameAndLastName(  String firstName, String lastName );
    
    /**
     * 

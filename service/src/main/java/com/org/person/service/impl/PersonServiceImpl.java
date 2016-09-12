@@ -113,10 +113,10 @@ public class PersonServiceImpl implements PersonService
     * 
     * @see com.org.person.service.PersonService#findByFirstNameAndLastName(java.lang.String, java.lang.String)
     */
-   public List<PersonEntity> findByFirstNameAndLastName( String lastName, String firstName )
+   public List<PersonEntity> findByFirstNameAndLastName( String firstName, String lastName )
    {
-      logger.debug( "findByFirstNameAndLastName {} {} ", lastName, firstName );
-      return personDao.findByFirstNameAndLastName( lastName, firstName );
+      logger.debug( "findByFirstNameAndLastName {} {} ", firstName, lastName );
+      return personDao.findByFirstNameAndLastName( firstName, lastName );
    }
    
    /**

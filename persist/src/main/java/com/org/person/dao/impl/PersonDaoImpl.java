@@ -54,9 +54,9 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    }
    
    /**
-    * 
-    * @see com.org.dao.ObjectDao#findByLastName(java.lang.String)
-    */
+   * 
+   * @see com.org.person.dao.PersonDao#findByLastName(java.lang.String)
+   */
    @SuppressWarnings("unchecked")
    public List<PersonEntity> findByLastName( String lastName )
    {
@@ -68,6 +68,10 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       return entityManager.createQuery( "select p from Person p where p.lastName = :lastName" ).setParameter( "lastName", lastName ).getResultList();
    }
    
+   /**
+    * 
+    * @see com.org.person.dao.PersonDao#findByEmail(java.lang.String)
+    */
    public PersonEntity findByEmail( String email )
    {
       logger.debug( "findByEmail  {}", email );
@@ -92,11 +96,11 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    }
    
    /**
-    * 
-    * @see com.org.dao.ObjectDao#findByLastName(java.lang.String)
-    */
+   * 
+   * @see com.org.person.dao.PersonDao#findByFirstNameAndLastName(java.lang.String, java.lang.String)
+   */
    @SuppressWarnings("unchecked")
-   public List<PersonEntity> findByFirstNameAndLastName( String lastName, String firstName )
+   public List<PersonEntity> findByFirstNameAndLastName( String firstName, String lastName )
    {
       logger.debug( "findByFirstNameAndLastName  {} {}", lastName, firstName );
       if( lastName == null || lastName.trim().length() < 1 )

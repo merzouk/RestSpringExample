@@ -58,5 +58,5 @@ public interface PersonDao<T> extends ObjectDao<T>
     * @param firstName
     * @return
     */
-   List<T> findByFirstNameAndLastName( String lastName, String firstName );
+   List<T> findByFirstNameAndLastName( String firstName, String lastName );
 }
