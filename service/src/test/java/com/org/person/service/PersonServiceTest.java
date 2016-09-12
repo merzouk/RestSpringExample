@@ -61,8 +61,7 @@ public class PersonServiceTest
    @Autowired
    private PersonService       personService;
    
-   
-   private static final int LENGTH = 10;
+   private static final int    LENGTH = 10;
    
    @Test
    public void test_1()
@@ -112,6 +111,7 @@ public class PersonServiceTest
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
+      primaryKey = 1;
       Assert.assertEquals( primaryKey, id );
       Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
@@ -159,6 +159,22 @@ public class PersonServiceTest
       p.setEmail( email );
       p = personService.savePerson( p );
       Assert.assertNull( p );
+      /**
+       * 
+       */
+      logger.info( "load list test" );
+      list = personService.findAllPersons();
+      Assert.assertEquals( 1, list.size() );
+      /**
+       * 
+       */
+      personService.deletePersonById( 1 );
+      /**
+       * 
+       */
+      logger.info( "load list test" );
+      list = personService.findAllPersons();
+      Assert.assertEquals( 0, list.size() );
    }
    
    private String generateStringRandom( int length )

@@ -58,7 +58,7 @@ public class PersonServiceTest
    
    private static final Logger logger = LoggerFactory.getLogger( PersonServiceTest.class );
    
-   private static final int LENGTH = 10;
+   private static final int    LENGTH = 10;
    
    @Autowired
    private PersonService       personService;
@@ -78,11 +78,11 @@ public class PersonServiceTest
        * 
        */
       logger.info( "save test" );
-      p = personService.savePerson( p);
+      p = personService.savePerson( p );
       Integer id = p.getId();
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email + "@email.com" , p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       /**
        * 
        */
@@ -111,6 +111,7 @@ public class PersonServiceTest
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
+      primaryKey = 1;
       Assert.assertEquals( primaryKey, id );
       Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
@@ -130,7 +131,7 @@ public class PersonServiceTest
        */
       email = email + "_1@email.com";
       p.setEmail( email );
-      personService.updatePerson(  p );
+      personService.updatePerson( p );
       /**
        * 
        */
@@ -158,6 +159,22 @@ public class PersonServiceTest
       p.setEmail( email );
       p = personService.savePerson( p );
       Assert.assertNull( p );
+      /**
+       * 
+       */
+      logger.info( "load list test" );
+      list = personService.findAllPersons();
+      Assert.assertEquals( 1, list.size() );
+      /**
+       * 
+       */
+      personService.deletePersonById( 1 );
+      /**
+       * 
+       */
+      logger.info( "load list test" );
+      list = personService.findAllPersons();
+      Assert.assertEquals( 0, list.size() );
    }
    
    private String generateStringRandom( int length )

@@ -60,7 +60,7 @@ public class PersonDaoTest
    
    private static final Logger     logger = LoggerFactory.getLogger( PersonDaoTest.class );
    
-   private static final int LENGTH = 10;
+   private static final int        LENGTH = 10;
    
    @Autowired
    private PersonDao<PersonEntity> personDao;
@@ -112,7 +112,7 @@ public class PersonDaoTest
       Integer id = p.getId();
       Assert.assertNotNull( id );
       Assert.assertEquals( primaryKey, id );
-      Assert.assertEquals( email + "@email.com" , p.getEmail() );
+      Assert.assertEquals( email + "@email.com", p.getEmail() );
       /**
        * 
        */
@@ -141,6 +141,7 @@ public class PersonDaoTest
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );
       Assert.assertNotNull( id );
+      primaryKey = 1;
       Assert.assertEquals( primaryKey, id );
       Assert.assertEquals( email + "@email.com", p.getEmail() );
       Assert.assertEquals( lastName, p.getLastName() );
@@ -188,6 +189,22 @@ public class PersonDaoTest
       p.setEmail( email );
       p = personDao.save( p );
       Assert.assertNull( p );
+      /**
+       * 
+       */
+      logger.info( "load list test" );
+      list = personDao.findAll();
+      Assert.assertEquals( 1, list.size() );
+      /**
+       * 
+       */
+      personDao.deleteById( 1 );
+      /**
+       * 
+       */
+      logger.info( "load list test" );
+      list = personDao.findAll();
+      Assert.assertEquals( 0, list.size() );
    }
    
    private String generateStringRandom( int length )
