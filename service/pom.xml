@@ -29,6 +29,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Spring Dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -47,6 +53,7 @@
 			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 
 		<!-- log -->
 		<dependency>
