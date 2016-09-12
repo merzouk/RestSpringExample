@@ -61,15 +61,18 @@ public class PersonServiceTest
    @Autowired
    private PersonService       personService;
    
+   
+   private static final int LENGTH = 10;
+   
    @Test
    public void test_1()
    {
       Integer primaryKey = 1;
       PersonEntity p = new PersonEntity();
-      String email = generateStringRandom( 10 );
-      String firstName = generateStringRandom( 10 );
+      String email = generateStringRandom( LENGTH );
+      String firstName = generateStringRandom( LENGTH );
       p.setFirstName( firstName );
-      String lastName = generateStringRandom( 10 );
+      String lastName = generateStringRandom( LENGTH );
       p.setLastName( lastName );
       p.setEmail( email + "@email.com" );
       /**
@@ -149,9 +152,9 @@ public class PersonServiceTest
        * 
        */
       p = new PersonEntity();
-      firstName = generateStringRandom( 10 );
+      firstName = generateStringRandom( LENGTH );
       p.setFirstName( firstName );
-      lastName = generateStringRandom( 10 );
+      lastName = generateStringRandom( LENGTH );
       p.setLastName( lastName );
       p.setEmail( email );
       p = personService.savePerson( p );

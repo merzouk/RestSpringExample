@@ -34,6 +34,8 @@ public class PersonControllerClientTest
    
    public static final String  REST_SERVICE_URI = "http://localhost:8585/person/gestionPersonnel/";
    
+   private static final int LENGTH = 10;
+   
    @Before
    public void init()
    {
@@ -112,7 +114,7 @@ public class PersonControllerClientTest
    {
       logger.info( "Testing create Person API" );
       RestTemplate restTemplate = new RestTemplate();
-      PersonEntity person = new PersonEntity( null, generateStringRandom( 20 ), generateStringRandom( 20 ), generateStringRandom( 20 ) + "@courriel.com" );
+      PersonEntity person = new PersonEntity( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
       URI uri = restTemplate.postForLocation( REST_SERVICE_URI + "/createPerson/", person, PersonEntity.class );
       if( uri != null )
       {
@@ -124,7 +126,7 @@ public class PersonControllerClientTest
    {
       if( length == 0 )
       {
-         length = 20;
+         length = 15;
       }
       char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
       StringBuilder sb = new StringBuilder();
@@ -144,7 +146,7 @@ public class PersonControllerClientTest
    {
       logger.info( "Testing update Person API" );
       RestTemplate restTemplate = new RestTemplate();
-      PersonEntity person = new PersonEntity( null, generateStringRandom( 20 ), generateStringRandom( 20 ), generateStringRandom( 20 ) + "@courriel.com" );
+      PersonEntity person = new PersonEntity( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
       restTemplate.put( REST_SERVICE_URI + "/updatePerson/" + primaryKey, person );
       logger.info( "" + person.toString() );
    }

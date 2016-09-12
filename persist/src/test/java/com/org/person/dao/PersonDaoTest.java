@@ -60,6 +60,8 @@ public class PersonDaoTest
    
    private static final Logger     logger = LoggerFactory.getLogger( PersonDaoTest.class );
    
+   private static final int LENGTH = 10;
+   
    @Autowired
    private PersonDao<PersonEntity> personDao;
    
@@ -96,10 +98,10 @@ public class PersonDaoTest
    {
       Integer primaryKey = 1;
       PersonEntity p = new PersonEntity();
-      String email = generateStringRandom( 10 );
-      String firstName = generateStringRandom( 10 );
+      String email = generateStringRandom( LENGTH );
+      String firstName = generateStringRandom( LENGTH );
       p.setFirstName( firstName );
-      String lastName = generateStringRandom( 10 );
+      String lastName = generateStringRandom( LENGTH );
       p.setLastName( lastName );
       p.setEmail( email + "@email.com" );
       /**
@@ -179,9 +181,9 @@ public class PersonDaoTest
        * 
        */
       p = new PersonEntity();
-      firstName = generateStringRandom( 10 );
+      firstName = generateStringRandom( LENGTH );
       p.setFirstName( firstName );
-      lastName = generateStringRandom( 10 );
+      lastName = generateStringRandom( LENGTH );
       p.setLastName( lastName );
       p.setEmail( email );
       p = personDao.save( p );
@@ -192,7 +194,7 @@ public class PersonDaoTest
    {
       if( length == 0 )
       {
-         length = 20;
+         length = 15;
       }
       char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
       StringBuilder sb = new StringBuilder();
