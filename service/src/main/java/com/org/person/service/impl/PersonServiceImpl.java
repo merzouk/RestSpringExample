@@ -9,23 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.org.person.dao.PersonDao;
-import com.org.person.entity.PersonEntity;
-import com.org.person.service.PersonService;
+import com.org.person.model.PersonModel;
+import com.org.person.service.Services;
 
 @Service("personService")
-public class PersonServiceImpl implements PersonService
+public class PersonServiceImpl implements Services<PersonModel>
 {
    
-   private static final Logger     logger = LoggerFactory.getLogger( PersonServiceImpl.class );
+   private static final Logger    logger = LoggerFactory.getLogger( PersonServiceImpl.class );
    
    @Autowired
-   private PersonDao<PersonEntity> personDao;
+   private PersonDao<PersonModel> personDao;
    
    /**
     * 
-    * @see com.org.person.service.PersonService#findAllPersons()
+    * @see com.org.person.service.Services#findAllPersons()
     */
-   public List<PersonEntity> findAllPersons()
+   public List<PersonModel> findAlls()
    {
       logger.debug( "findAllPersons" );
       return personDao.findAll();
@@ -33,9 +33,9 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#findById(long)
+    * @see com.org.person.service.Services#findById(long)
     */
-   public PersonEntity findById( Integer primaryKey )
+   public PersonModel findById( Integer primaryKey )
    {
       logger.debug( "findById {} ", primaryKey );
       return personDao.findById( primaryKey );
@@ -43,9 +43,9 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#findByFirstName(java.lang.String)
+    * @see com.org.person.service.Services#findByFirstName(java.lang.String)
     */
-   public List<PersonEntity> findByLastName( String lastName )
+   public List<PersonModel> findByLastName( String lastName )
    {
       logger.debug( "findByLastName {} ", lastName );
       return personDao.findByLastName( lastName );
@@ -53,19 +53,19 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#savePerson(com.org.person.entity.PersonEntity)
+    * @see com.org.person.service.Services#savePerson(com.org.person.entity.Person)
     */
-   public PersonEntity savePerson( PersonEntity person )
+   public PersonModel save( PersonModel person )
    {
-      logger.debug( "savePerson  {} ", person.toString() );
+      logger.debug( "savePersonModel  {} ", person.toString() );
       return personDao.save( person );
    }
    
    /**
     * 
-    * @see com.org.person.service.PersonService#updatePerson(com.org.person.entity.PersonEntity)
+    * @see com.org.person.service.Services#updatePerson(com.org.person.entity.Person)
     */
-   public PersonEntity updatePerson( PersonEntity person )
+   public PersonModel update( PersonModel person )
    {
       logger.debug( "updatePerson  {} ", person.toString() );
       return personDao.update( person );
@@ -73,9 +73,9 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#deletePersonById(long)
+    * @see com.org.person.service.Services#deletePersonById(long)
     */
-   public void deletePersonById( Integer primaryKey )
+   public void deleteById( Integer primaryKey )
    {
       logger.debug( "deletePersonById {} ", primaryKey );
       personDao.deleteById( primaryKey );
@@ -83,14 +83,14 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#isPersonExist(com.org.person.entity.PersonEntity)
+    * @see com.org.person.service.Services#isPersonExist(com.org.person.entity.Person)
     */
-   public boolean isPersonExist( PersonEntity person )
+   public boolean isExist( PersonModel person )
    {
       logger.debug( "isPersonExist {} ", person.toString() );
       try
       {
-         return ( personDao.findByEmail( person.getEmail() ) != null );
+         return ( personDao.findByEmail( person.getCourriel() ) != null );
       }
       catch( Exception e )
       {
@@ -101,9 +101,9 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#deleteAllPersons()
+    * @see com.org.person.service.Services#deleteAllPersons()
     */
-   public void deleteAllPersons()
+   public void deleteAlls()
    {
       logger.debug( "deleteAllPersons" );
       personDao.deleteAll();
@@ -111,9 +111,9 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#findByFirstNameAndLastName(java.lang.String, java.lang.String)
+    * @see com.org.person.service.Services#findByFirstNameAndLastName(java.lang.String, java.lang.String)
     */
-   public List<PersonEntity> findByFirstNameAndLastName( String firstName, String lastName )
+   public List<PersonModel> findByFirstNameAndLastName( String firstName, String lastName )
    {
       logger.debug( "findByFirstNameAndLastName {} {} ", firstName, lastName );
       return personDao.findByFirstNameAndLastName( firstName, lastName );
@@ -121,11 +121,13 @@ public class PersonServiceImpl implements PersonService
    
    /**
     * 
-    * @see com.org.person.service.PersonService#findByEmail(java.lang.String)
+    * @see com.org.person.service.Services#findByEmail(java.lang.String)
     */
-   public PersonEntity findByEmail( String email )
+   public PersonModel findByEmail( String email )
    {
       logger.debug( "findByEmail {} ", email );
       return personDao.findByEmail( email );
    }
+
+  
 }

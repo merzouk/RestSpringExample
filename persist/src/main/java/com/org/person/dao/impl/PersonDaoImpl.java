@@ -13,13 +13,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.org.person.dao.PersonDao;
-import com.org.person.entity.PersonEntity;
+import com.org.person.entity.Person;
+import com.org.person.model.PersonModel;
 import com.org.tools.ConstantesUtils;
 import com.org.tools.Utils;
 
 @Repository("personDao")
 @Transactional
-public class PersonDaoImpl implements PersonDao<PersonEntity>
+public class PersonDaoImpl implements PersonDao<PersonModel>
 {
    
    private static final Logger logger = LoggerFactory.getLogger( PersonDaoImpl.class );
@@ -32,10 +33,10 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
     * @see com.org.dao.ObjectDao#findAll()
     */
    @SuppressWarnings("unchecked")
-   public List<PersonEntity> findAll()
+   public List<PersonModel> findAll()
    {
       logger.debug( "findAll" );
-      List<PersonEntity> list = null;
+      List<Person> list = null;
       try
       {
          list = entityManager.createQuery( "select p from Person p" ).getResultList();
@@ -44,29 +45,30 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       {
          logger.error( "Error during load list Person ", e );
       }
-      return list;
+      return toListModel( list );
    }
    
    /**
     * 
     * @see com.org.dao.ObjectDao#findById(java.lang.Integer)
     */
-   public PersonEntity findById( Integer primaryKey )
+   public PersonModel findById( Integer primaryKey )
    {
       logger.debug( "findById  {}", primaryKey );
       if( primaryKey == null || primaryKey.intValue() <= 0 )
       {
          return null;
       }
+      Person entity = null;
       try
       {
-         return entityManager.find( PersonEntity.class, primaryKey );
+         entity = entityManager.find( Person.class, primaryKey );
       }
       catch( Exception e )
       {
          logger.error( "Error during load  Person by id {} ", primaryKey, e );
       }
-      return null;
+      return toModel( entity );
    }
    
    /**
@@ -74,29 +76,30 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    * @see com.org.person.dao.PersonDao#findByLastName(java.lang.String)
    */
    @SuppressWarnings("unchecked")
-   public List<PersonEntity> findByLastName( String lastName )
+   public List<PersonModel> findByLastName( String lastName )
    {
       logger.debug( "findByLastName {} ", lastName );
       if( lastName == null || lastName.trim().length() < 1 )
       {
-         return new ArrayList<PersonEntity>();
+         return new ArrayList<PersonModel>();
       }
+      List<Person> entities = null;
       try
       {
-         return entityManager.createQuery( "select p from Person p where p.lastName = :lastName" ).setParameter( "lastName", lastName ).getResultList();
+         entities = entityManager.createQuery( "select p from Person p where p.lastName = :lastName" ).setParameter( "lastName", lastName ).getResultList();
       }
       catch( Exception e )
       {
          logger.error( "Error during load  Person by lastName {} ", lastName, e );
       }
-      return null;
+      return toListModel( entities );
    }
    
    /**
     * 
     * @see com.org.person.dao.PersonDao#findByEmail(java.lang.String)
     */
-   public PersonEntity findByEmail( String email )
+   public PersonModel findByEmail( String email )
    {
       logger.debug( "findByEmail  {}", email );
       if( email == null || email.trim().length() < 10 || !Utils.isValidEmailAddress( email ) )
@@ -107,14 +110,11 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       try
       {
          obj = entityManager.createQuery( "select p from Person p where p.email = :email" ).setParameter( "email", email ).getSingleResult();
+         return toModel( (Person) obj );
       }
       catch( Exception e )
       {
          logger.error( "Eror during load person by email {} ", email, e );
-      }
-      if( obj != null )
-      {
-         return (PersonEntity) obj;
       }
       return null;
    }
@@ -124,42 +124,44 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    * @see com.org.person.dao.PersonDao#findByFirstNameAndLastName(java.lang.String, java.lang.String)
    */
    @SuppressWarnings("unchecked")
-   public List<PersonEntity> findByFirstNameAndLastName( String firstName, String lastName )
+   public List<PersonModel> findByFirstNameAndLastName( String firstName, String lastName )
    {
       logger.debug( "findByFirstNameAndLastName  {} {}", lastName, firstName );
       if( lastName == null || lastName.trim().length() < 1 )
       {
-         return new ArrayList<PersonEntity>();
+         return new ArrayList<PersonModel>();
       }
+      List<Person> entities = null;
       try
       {
-         return entityManager.createQuery( "select p from Person p where p.lastName = :lastName and p.firstName = :firstName" ).setParameter( "lastName", lastName ).setParameter( "firstName", firstName ).getResultList();
+         entities = entityManager.createQuery( "select p from Person p where p.lastName = :lastName and p.firstName = :firstName" ).setParameter( "lastName", lastName ).setParameter( "firstName", firstName ).getResultList();
       }
       catch( Exception e )
       {
          logger.error( "Error during load  Person by lastName {} firstName {}  ", lastName, firstName, e );
       }
-      return null;
+      return toListModel( entities );
    }
    
    /**
     * 
-    * @see com.org.dao.ObjectDao#save(com.org.person.entity.PersonEntity)
+    * @see com.org.dao.ObjectDao#save(com.org.person.entity.Person)
     */
    @Transactional
-   public PersonEntity save( PersonEntity person )
+   public PersonModel save( PersonModel person )
    {
       logger.debug( "save {}", person.toString() );
       if( !validatePerson( person ) )
       {
          return null;
       }
-      if( findByEmail( person.getEmail() ) == null )
+      if( findByEmail( person.getCourriel() ) == null )
       {
          try
          {
-            entityManager.persist( person );
-            return person;
+            Person entity = toEntity( person );
+            entityManager.persist( entity );
+            return toModel( entity );
          }
          catch( Exception e )
          {
@@ -171,18 +173,19 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    
    /**
     * 
-    * @see com.org.dao.ObjectDao#update(com.org.person.entity.PersonEntity)
+    * @see com.org.dao.ObjectDao#update(com.org.person.entity.Person)
     */
    @Transactional
-   public PersonEntity update( PersonEntity person )
+   public PersonModel update( PersonModel person )
    {
       logger.debug( "update {}", person.toString() );
-      if( person != null && person.getId() != null && person.getId().intValue() > 0 )
+      if( person != null && person.getPersonId() != null && person.getPersonId().intValue() > 0 )
       {
          try
          {
-            entityManager.merge( person );
-            return person;
+            Person entity = toEntity( person );
+            entityManager.merge( entity );
+            return toModel( entity );
          }
          catch( Exception e )
          {
@@ -204,7 +207,7 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
       {
          return;
       }
-      PersonEntity entity = findById( primaryKey );
+      Person entity = entityManager.find( Person.class, primaryKey );
       if( entity != null )
       {
          try
@@ -220,14 +223,14 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    
    /**
     * 
-    * @see com.org.dao.ObjectDao#isExist(com.org.person.entity.PersonEntity)
+    * @see com.org.dao.ObjectDao#isExist(com.org.person.entity.Person)
     */
-   public boolean isExist( PersonEntity person )
+   public boolean isExist( PersonModel person )
    {
       logger.debug( "isExist {}", person.toString() );
       try
       {
-         return findByLastName( person.getLastName() ) != null;
+         return findByLastName( person.getNom() ) != null;
       }
       catch( Exception e )
       {
@@ -244,14 +247,7 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
    public void deleteAll()
    {
       logger.debug( "deleteAll " );
-      List<PersonEntity> list = findAll();
-      if( list != null && list.size() > 0 )
-      {
-         for( PersonEntity person : list )
-         {
-            deleteById( person.getId() );
-         }
-      }
+      entityManager.createQuery( "delete from " + Person.class ).executeUpdate();
    }
    
    /**
@@ -259,25 +255,85 @@ public class PersonDaoImpl implements PersonDao<PersonEntity>
     * @param person
     * @return
     */
-   private boolean validatePerson( PersonEntity person )
+   private boolean validatePerson( PersonModel person )
    {
       logger.debug( "validatePerson" );
       if( person == null )
       {
          return false;
       }
-      if( person.getEmail() == null || person.getEmail().trim().length() < ConstantesUtils.EMAIL_LENGTH_MIN || !Utils.isValidEmailAddress( person.getEmail() ) )
+      if( person.getCourriel() == null || person.getCourriel().trim().length() < ConstantesUtils.EMAIL_LENGTH_MIN || !Utils.isValidEmailAddress( person.getCourriel() ) )
       {
          return false;
       }
-      if( person.getLastName() == null || person.getLastName().trim().length() < ConstantesUtils.NAME_LENGTH_MIN )
+      if( person.getNom() == null || person.getNom().trim().length() < ConstantesUtils.NAME_LENGTH_MIN )
       {
          return false;
       }
-      if( person.getFirstName() == null || person.getFirstName().trim().length() < ConstantesUtils.NAME_LENGTH_MIN )
+      if( person.getPrenom() == null || person.getPrenom().trim().length() < ConstantesUtils.NAME_LENGTH_MIN )
       {
          return false;
       }
       return true;
+   }
+   
+   /**
+    * 
+    * @param entity
+    * @return
+    */
+   private PersonModel toModel( Person entity )
+   {
+      
+      if( entity == null )
+      {
+         return new PersonModel();
+      }
+      PersonModel model = new PersonModel();
+      model.setCourriel( entity.getEmail() );
+      model.setNom( entity.getLastName() );
+      model.setPersonId( entity.getId() );
+      model.setPrenom( entity.getFirstName() );
+      return model;
+   }
+   
+   private List<PersonModel> toListModel( List<Person> entities )
+   {
+      if( entities == null || entities.isEmpty() || entities.size() == 0 )
+      {
+         return new ArrayList<PersonModel>();
+      }
+      List<PersonModel> list = new ArrayList<PersonModel>();
+      for( Person entity : entities )
+      {
+         list.add( toModel( entity ) );
+      }
+      return list;
+   }
+   
+   /**
+    * 
+    * @param model
+    * @return
+    */
+   private Person toEntity( PersonModel model )
+   {
+      if( model == null )
+      {
+         return new Person();
+      }
+      Person entity = new Person();
+      entity.setEmail( model.getCourriel() );
+      entity.setFirstName( model.getPrenom() );
+      if( model.getPersonId() != null && model.getPersonId().intValue() > 0 )
+      {
+         entity.setId( model.getPersonId() );
+      }
+      else
+      {
+         entity.setId( 0 );
+      }
+      entity.setLastName( model.getNom() );
+      return entity;
    }
 }

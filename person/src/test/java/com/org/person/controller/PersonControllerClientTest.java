@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
 import com.org.exception.PersonException;
-import com.org.person.entity.PersonEntity;
+import com.org.person.model.PersonModel;
 
 /**
  * 
@@ -93,19 +93,17 @@ public class PersonControllerClientTest
    /**
     * GET
     */
-   private static void getPerson( Integer primaryKey ) throws PersonException
+   private PersonModel getPerson( Integer primaryKey ) throws PersonException
    {
       logger.info( "Testing getPerson API" );
       RestTemplate restTemplate = new RestTemplate();
-      PersonEntity person = restTemplate.getForObject( REST_SERVICE_URI + "/getPersonById/" + primaryKey, PersonEntity.class );
+      PersonModel person = restTemplate.getForObject( REST_SERVICE_URI + "/getPersonById/" + primaryKey, PersonModel.class );
       if( person == null )
       {
          throw new PersonException( "Not load Person by id = " + primaryKey );
       }
       Assert.assertNotNull( person );
-      Assert.assertTrue( person.getId().intValue() > 0 );
-      Assert.assertEquals( primaryKey, person.getId() );
-      logger.info( "" + person.toString() );
+      return person;
    }
    
    /**
@@ -115,8 +113,8 @@ public class PersonControllerClientTest
    {
       logger.info( "Testing create Person API" );
       RestTemplate restTemplate = new RestTemplate();
-      PersonEntity person = new PersonEntity( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
-      URI uri = restTemplate.postForLocation( REST_SERVICE_URI + "/createPerson/", person, PersonEntity.class );
+      PersonModel person = new PersonModel( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
+      URI uri = restTemplate.postForLocation( REST_SERVICE_URI + "/createPerson/", person, PersonModel.class );
       if( uri != null )
       {
          logger.info( "Location : " + uri.toASCIIString() );
@@ -147,7 +145,7 @@ public class PersonControllerClientTest
    {
       logger.info( "Testing update Person API" );
       RestTemplate restTemplate = new RestTemplate();
-      PersonEntity person = new PersonEntity( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
+      PersonModel person = new PersonModel( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
       restTemplate.put( REST_SERVICE_URI + "/updatePerson/" + primaryKey, person );
       logger.info( "" + person.toString() );
    }
@@ -215,9 +213,11 @@ public class PersonControllerClientTest
       Assert.assertEquals( 5, actual );
    }
    
-   @Test(expected = PersonException.class)
-   public void test_5() throws PersonException
+   @Test
+   public void test_5() 
    {
-      getPerson( 4 );
+      PersonModel person = getPerson( 4 );
+      Integer key = 0;
+      Assert.assertEquals( key, person.getPersonId() );
    }
 }
