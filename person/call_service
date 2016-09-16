@@ -1,0 +1,13 @@
+http://localhost:8585/person/gestionPersonnel/persons/
+
+http://localhost:8585/person/gestionPersonnel/getPersonById/1
+
+http://localhost:8585/person/gestionPersonnel/deletePersonById/1
+
+http://localhost:8585/person/gestionPersonnel/getPersonByEmail/ry@gmail/com
+
+http://localhost:8585/person/gestionPersonnel/getPersonByLastName/MMR
+
+http://localhost:8585/person/gestionPersonnel/getPersonByFirstAndLastName/Ry/MMR
+
+http://localhost:8585/person/gestionPersonnel/deleteAllpersons/
