@@ -20,3 +20,5 @@ You deploy the war in your server, the unit test for Rest Service is PersonContr
 Set port value in REST_SERVICE_URI.
 
 You can test you service Rest by Browser, the uris is in call_service file.
+
+his project follows the recommendations of the Model oinion Architecture. 
