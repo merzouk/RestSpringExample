@@ -14,6 +14,8 @@
 		<module>service</module>
 		<module>model</module>
 		<module>contrat</module>
+		<module>use-cases</module>
+		<module>commons</module>
 	</modules>
 
 	<properties>
@@ -52,6 +54,17 @@
 				<artifactId>contrat</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.org</groupId>
+				<artifactId>use-cases</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.org</groupId>
+				<artifactId>commons</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<!-- hsqldb -->
 			<dependency>
 				<groupId>hsqldb</groupId>

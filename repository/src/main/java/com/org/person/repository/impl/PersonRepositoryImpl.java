@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.org.commons.ConstantesUtils;
+import com.org.commons.Utils;
 import com.org.person.contrat.PersonContrat;
 import com.org.person.entity.PersonEntity;
 import com.org.person.model.PersonModel;
-import com.org.tools.ConstantesUtils;
-import com.org.tools.Utils;
 
 /**
  * 

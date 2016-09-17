@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.org.Controller;
+import com.org.person.contrats.usecases.CreateOrUpdatePerson;
+import com.org.person.contrats.usecases.DeletePerson;
+import com.org.person.contrats.usecases.LoadPerson;
 import com.org.person.model.PersonModel;
-import com.org.person.service.Services;
 
 /**
  * 
@@ -32,12 +34,18 @@ import com.org.person.service.Services;
 public class PersonController implements Controller<PersonModel>
 {
    
-   private static final Logger logger = LoggerFactory.getLogger( PersonController.class );
+   private static final Logger  logger = LoggerFactory.getLogger( PersonController.class );
    
    @Autowired
-   private Services<PersonModel>       personService;
+   private LoadPerson           listPerson;
    
-  /**
+   @Autowired
+   private CreateOrUpdatePerson createOrUpdate;
+   
+   @Autowired
+   private DeletePerson         deletePerson;
+   
+   /**
    * 
    * @see com.org.Controller#listAll()
    */
@@ -45,7 +53,7 @@ public class PersonController implements Controller<PersonModel>
    public ResponseEntity<List<PersonModel>> listAll()
    {
       logger.info( "listAllPersons" );
-      List<PersonModel> persons = personService.findAlls();
+      List<PersonModel> persons = listPerson.listPerson();
       if( persons.isEmpty() )
       {
          return new ResponseEntity<List<PersonModel>>( new ArrayList<PersonModel>(), HttpStatus.OK );
@@ -53,7 +61,7 @@ public class PersonController implements Controller<PersonModel>
       return new ResponseEntity<List<PersonModel>>( persons, HttpStatus.OK );
    }
    
-  /**
+   /**
    * 
    * @see com.org.Controller#getById(java.lang.Integer)
    */
@@ -61,7 +69,7 @@ public class PersonController implements Controller<PersonModel>
    public ResponseEntity<PersonModel> getById( @PathVariable("primaryKey") Integer primaryKey )
    {
       logger.info( "Fetching Person with primaryKey " + primaryKey );
-      PersonModel person = personService.findById( primaryKey );
+      PersonModel person = listPerson.personByPrimaryKey( primaryKey );
       if( person == null )
       {
          logger.info( "Person with primaryKey " + primaryKey + " not found" );
@@ -78,7 +86,7 @@ public class PersonController implements Controller<PersonModel>
    public ResponseEntity<PersonModel> getByEmail( @PathVariable("email") String email, @PathVariable("domain") String domain )
    {
       logger.info( "Fetching Person with email " + email + "." + domain );
-      PersonModel person = personService.findByEmail( email + "." + domain );
+      PersonModel person = listPerson.findPersonByEmail( email + "." + domain );
       if( person == null )
       {
          logger.info( "Person with email " + email + " not found" );
@@ -95,7 +103,7 @@ public class PersonController implements Controller<PersonModel>
    public ResponseEntity<List<PersonModel>> getByLastName( @PathVariable("lastName") String lastName )
    {
       logger.info( "Fetching Person with lastName " + lastName );
-      List<PersonModel> persons = personService.findByLastName( lastName );
+      List<PersonModel> persons = listPerson.findPersonByLastName( lastName );
       if( persons == null || persons.size() == 0 )
       {
          logger.info( "Person with lastName " + lastName + " not found" );
@@ -104,15 +112,15 @@ public class PersonController implements Controller<PersonModel>
       return new ResponseEntity<List<PersonModel>>( persons, HttpStatus.OK );
    }
    
- /**
-  * 
-  * @see com.org.Controller#getByFirstAndLastName(java.lang.String, java.lang.String)
-  */
+   /**
+    * 
+    * @see com.org.Controller#getByFirstAndLastName(java.lang.String, java.lang.String)
+    */
    @RequestMapping(value = "/getPersonByFirstAndLastName/{firstName}/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<List<PersonModel>> getByFirstAndLastName(@PathVariable("firstName") String firstName , @PathVariable("lastName") String lastName )
+   public ResponseEntity<List<PersonModel>> getByFirstAndLastName( @PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName )
    {
       logger.info( "get Persons with lastName " + lastName + " and firstName " + firstName );
-      List<PersonModel> persons = personService.findByFirstNameAndLastName( lastName, firstName );
+      List<PersonModel> persons = listPerson.findPersonByFirstNameAndLastName( firstName, lastName );
       if( persons == null || persons.size() == 0 )
       {
          logger.info( "Person with lastName " + lastName + " not found" );
@@ -130,8 +138,9 @@ public class PersonController implements Controller<PersonModel>
    {
       logger.info( "Creating Person  " + person.toString() );
       String email = person.getCourriel();
-      person.setPersonId( null );;
-      person = personService.save( person );
+      person.setPersonId( null );
+      ;
+      person = createOrUpdate.createPerson( person );
       if( person != null )
       {
          return new ResponseEntity<PersonModel>( person, HttpStatus.OK );
@@ -140,7 +149,7 @@ public class PersonController implements Controller<PersonModel>
       return new ResponseEntity<PersonModel>( HttpStatus.CONFLICT );
    }
    
-  /**
+   /**
    * 
    * @see com.org.Controller#update(java.lang.Integer, java.lang.Object)
    */
@@ -148,7 +157,7 @@ public class PersonController implements Controller<PersonModel>
    public ResponseEntity<PersonModel> update( @PathVariable("primaryKey") Integer primaryKey, @RequestBody PersonModel person )
    {
       logger.info( "Updating Person " + primaryKey );
-      PersonModel currentPerson = personService.findById( primaryKey );
+      PersonModel currentPerson = listPerson.personByPrimaryKey( primaryKey );
       if( currentPerson == null )
       {
          logger.info( "Person with primaryKey " + primaryKey + " not found" );
@@ -157,11 +166,11 @@ public class PersonController implements Controller<PersonModel>
       currentPerson.setPrenom( person.getPrenom() );
       currentPerson.setNom( person.getNom() );
       currentPerson.setCourriel( person.getCourriel() );
-      personService.update( currentPerson );
+      createOrUpdate.updatePerson( currentPerson );
       return new ResponseEntity<PersonModel>( currentPerson, HttpStatus.OK );
    }
    
-  /**
+   /**
    * 
    * @see com.org.Controller#deleteById(java.lang.Integer)
    */
@@ -169,13 +178,13 @@ public class PersonController implements Controller<PersonModel>
    public ResponseEntity<PersonModel> deleteById( @PathVariable("primaryKey") Integer primaryKey )
    {
       logger.info( "get & Deleting Person with id " + primaryKey );
-      PersonModel person = personService.findById( primaryKey );
+      PersonModel person = listPerson.personByPrimaryKey( primaryKey );
       if( person == null )
       {
          logger.info( "Unable to delete. Person with id " + primaryKey + " not found" );
          return new ResponseEntity<PersonModel>( HttpStatus.NOT_FOUND );
       }
-      personService.deleteById( primaryKey );
+      deletePerson.deletePersonById( primaryKey );
       return new ResponseEntity<PersonModel>( new PersonModel(), HttpStatus.OK );
    }
 }

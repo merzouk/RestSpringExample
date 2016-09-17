@@ -22,7 +22,12 @@
 			<groupId>com.org</groupId>
 			<artifactId>contrat</artifactId>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>com.org</groupId>
+			<artifactId>commons</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
