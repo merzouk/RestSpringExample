@@ -37,6 +37,8 @@ public class PersonControllerClientTest
    
    private static final int    PORT             = 8585;
    
+   private static final String HOST             = "localhost";
+   
    private static final int    LENGTH           = 10;
    
    @Before
@@ -45,7 +47,7 @@ public class PersonControllerClientTest
       logger.info( "init" );
       try
       {
-         REST_SERVICE_URI = "http://localhost:" + PORT + "/person/gestionPersonnel/";
+         REST_SERVICE_URI = "http://" + HOST + ":" + PORT + "/person/gestionPersonnel/";
       }
       catch( Exception e )
       {
