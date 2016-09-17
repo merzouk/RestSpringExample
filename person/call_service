@@ -1,13 +1,13 @@
-http://localhost:8585/person/gestionPersonnel/persons/
+http://localhost:SERVER_PORT/person/gestionPersonnel/persons/
 
-http://localhost:8585/person/gestionPersonnel/getPersonById/1
+http://localhost:SERVER_PORT/person/gestionPersonnel/getPersonById/1
 
-http://localhost:8585/person/gestionPersonnel/deletePersonById/1
+http://localhost:SERVER_PORT/person/gestionPersonnel/deletePersonById/1
 
-http://localhost:8585/person/gestionPersonnel/getPersonByEmail/ry@gmail/com
+http://localhost:SERVER_PORT/person/gestionPersonnel/getPersonByEmail/ry@gmail/com
 
-http://localhost:8585/person/gestionPersonnel/getPersonByLastName/MMR
+http://localhost:SERVER_PORT/person/gestionPersonnel/getPersonByLastName/MMR
 
-http://localhost:8585/person/gestionPersonnel/getPersonByFirstAndLastName/Ry/MMR
+http://localhost:SERVER_PORT/person/gestionPersonnel/getPersonByFirstAndLastName/Ry/MMR
 
-http://localhost:8585/person/gestionPersonnel/deleteAllpersons/
+http://localhost:SERVER_PORT/person/gestionPersonnel/deleteAllpersons/
