@@ -165,6 +165,14 @@ public class PersonControllerClientTest
       return sb.toString();
    }
    
+   private static int counter = 0;
+   
+   @Test
+   public void test_0() throws PersonException
+   {
+      counter = listAllPersons();
+   }
+   
    @Test
    public void test_1() throws PersonException
    {
@@ -184,7 +192,7 @@ public class PersonControllerClientTest
    public void test_2() throws PersonException
    {
       int actual = listAllPersons();
-      Assert.assertEquals( 5, actual );
+      Assert.assertEquals( counter + 5, actual );
       getPerson( 1 );
    }
    
@@ -193,23 +201,50 @@ public class PersonControllerClientTest
    {
       createPerson();
       int actual = listAllPersons();
-      Assert.assertEquals( 6, actual );
+      Assert.assertEquals( counter + 6, actual );
    }
    
    @Test
    public void test_4()
    {
-      updatePerson( 3 );
-      deletePerson( 4 );
-      int actual = listAllPersons();
-      Assert.assertEquals( 5, actual );
+      Integer primaryKey = searchPersonFromDataBase();
+      updatePerson( primaryKey );
+      primaryKey = searchPersonFromDataBase();
+      if( primaryKey != null )
+      {
+         primaryKeyIndic = primaryKey;
+         deletePerson( primaryKey );
+         int actual = listAllPersons();
+         Assert.assertEquals( counter + 5, actual );
+      }
+      PersonModel person = getPerson( primaryKey);
+      primaryKey = 0;
+      Assert.assertEquals( person.getPersonId(), primaryKey);
+      
    }
    
+   private static Integer primaryKeyIndic = 0;
    @Test
    public void test_5()
    {
-      PersonModel person = getPerson( 4 );
+      PersonModel person = getPerson( primaryKeyIndic);
       Integer key = 0;
       Assert.assertEquals( key, person.getPersonId() );
+      Assert.assertEquals( null, person.getCourriel() );
+   }
+   
+   private Integer searchPersonFromDataBase()
+   {
+      int i = 1;
+      while( i < 100 )
+      {
+         PersonModel model = getPerson( i );
+         if( model != null && model.getPersonId() != null && model.getPersonId().intValue() > 0 )
+         {
+            return i;
+         }
+         i++;
+      }
+      return null;
    }
 }
