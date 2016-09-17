@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.org.person.contrat.PersonContrat;
-import com.org.person.entity.Person;
+import com.org.person.entity.PersonEntity;
 import com.org.person.model.PersonModel;
 import com.org.tools.ConstantesUtils;
 import com.org.tools.Utils;
@@ -40,14 +41,13 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
     * 
     * @see com.org.contrat.ObjectContrat#findAll()
     */
-   @SuppressWarnings("unchecked")
    public List<PersonModel> findAll()
    {
       logger.debug( "findAll" );
-      List<Person> list = null;
+      List<PersonEntity> list = null;
       try
       {
-         list = entityManager.createQuery( "select p from Person p" ).getResultList();
+         list = entityManager.createNamedQuery( PersonEntity.QUERY_FIND_ALL, PersonEntity.class ).getResultList();
       }
       catch( Exception e )
       {
@@ -67,10 +67,10 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       {
          return null;
       }
-      Person entity = null;
+      PersonEntity entity = null;
       try
       {
-         entity = entityManager.find( Person.class, primaryKey );
+         entity = (PersonEntity)entityManager.find( PersonEntity.class, primaryKey );
       }
       catch( Exception e )
       {
@@ -83,7 +83,6 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
    * 
    * @see com.org.person.contrat.PersonContrat#findByLastName(java.lang.String)
    */
-   @SuppressWarnings("unchecked")
    public List<PersonModel> findByLastName( String lastName )
    {
       logger.debug( "findByLastName {} ", lastName );
@@ -91,14 +90,14 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       {
          return new ArrayList<PersonModel>();
       }
-      List<Person> entities = null;
+      List<PersonEntity> entities = null;
       try
       {
-         entities = entityManager.createQuery( "select p from Person p where p.lastName = :lastName" ).setParameter( "lastName", lastName ).getResultList();
+         entities = entityManager.createNamedQuery( PersonEntity.QUERY_FIND_BY_PERSON_LASTNAME, PersonEntity.class ).setParameter( "lastName", lastName ).getResultList();
       }
       catch( Exception e )
       {
-         logger.error( "Error during load  Person by lastName {} ", lastName, e );
+         logger.error( "Error during load Person by lastName {} ", lastName, e );
       }
       return toListModel( entities );
    }
@@ -117,12 +116,12 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       Object obj = null;
       try
       {
-         obj = entityManager.createQuery( "select p from Person p where p.email = :email" ).setParameter( "email", email ).getSingleResult();
-         return toModel( (Person) obj );
+         obj = entityManager.createNamedQuery( PersonEntity.QUERY_FIND_BY_PERSON_EMAIL, PersonEntity.class ).setParameter( "email", email ).getSingleResult();
+         return toModel( (PersonEntity) obj );
       }
-      catch( Exception e )
+      catch( NoResultException e )
       {
-         logger.error( "Eror during load person by email {} ", email, e );
+         logger.error( "Not found person by email {} ", email);
       }
       return null;
    }
@@ -131,7 +130,6 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
    * 
    * @see com.org.person.contrat.PersonContrat#findByFirstNameAndLastName(java.lang.String, java.lang.String)
    */
-   @SuppressWarnings("unchecked")
    public List<PersonModel> findByFirstNameAndLastName( String firstName, String lastName )
    {
       logger.debug( "findByFirstNameAndLastName  {} {}", lastName, firstName );
@@ -139,10 +137,10 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       {
          return new ArrayList<PersonModel>();
       }
-      List<Person> entities = null;
+      List<PersonEntity> entities = null;
       try
       {
-         entities = entityManager.createQuery( "select p from Person p where p.lastName = :lastName and p.firstName = :firstName" ).setParameter( "lastName", lastName ).setParameter( "firstName", firstName ).getResultList();
+         entities = entityManager.createNamedQuery( PersonEntity.QUERY_FIND_BY_PERSON_LAST_FIRSTNAME, PersonEntity.class ).setParameter( "lastName", lastName ).setParameter( "firstName", firstName ).getResultList();
       }
       catch( Exception e )
       {
@@ -153,7 +151,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
    
    /**
     * 
-    * @see com.org.contrat.ObjectContrat#save(com.org.person.entity.Person)
+    * @see com.org.contrat.ObjectContrat#save(com.org.person.entity.PersonEntity)
     */
    @Transactional
    public PersonModel save( PersonModel person )
@@ -167,7 +165,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       {
          try
          {
-            Person entity = toEntity( person );
+            PersonEntity entity = toEntity( person );
             entityManager.persist( entity );
             return toModel( entity );
          }
@@ -181,7 +179,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
    
    /**
     * 
-    * @see com.org.contrat.ObjectContrat#update(com.org.person.entity.Person)
+    * @see com.org.contrat.ObjectContrat#update(com.org.person.entity.PersonEntity)
     */
    @Transactional
    public PersonModel update( PersonModel person )
@@ -191,7 +189,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       {
          try
          {
-            Person entity = toEntity( person );
+            PersonEntity entity = toEntity( person );
             entityManager.merge( entity );
             return toModel( entity );
          }
@@ -215,7 +213,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       {
          return;
       }
-      Person entity = entityManager.find( Person.class, primaryKey );
+      PersonEntity entity = entityManager.find( PersonEntity.class, primaryKey );
       if( entity != null )
       {
          try
@@ -231,7 +229,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
    
    /**
     * 
-    * @see com.org.contrat.ObjectContrat#isExist(com.org.person.entity.Person)
+    * @see com.org.contrat.ObjectContrat#isExist(com.org.person.entity.PersonEntity)
     */
    public boolean isExist( PersonModel person )
    {
@@ -255,7 +253,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
    public void deleteAll()
    {
       logger.debug( "deleteAll " );
-      entityManager.createQuery( "delete from " + Person.class ).executeUpdate();
+      entityManager.createQuery( "delete from " + PersonEntity.class ).executeUpdate();
    }
    
    /**
@@ -290,7 +288,7 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
     * @param entity
     * @return
     */
-   private PersonModel toModel( Person entity )
+   private PersonModel toModel( PersonEntity entity )
    {
       
       if( entity == null )
@@ -305,14 +303,14 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
       return model;
    }
    
-   private List<PersonModel> toListModel( List<Person> entities )
+   private List<PersonModel> toListModel( List<PersonEntity> entities )
    {
       if( entities == null || entities.isEmpty() || entities.size() == 0 )
       {
          return new ArrayList<PersonModel>();
       }
       List<PersonModel> list = new ArrayList<PersonModel>();
-      for( Person entity : entities )
+      for( PersonEntity entity : entities )
       {
          list.add( toModel( entity ) );
       }
@@ -324,13 +322,13 @@ public class PersonRepositoryImpl implements PersonContrat<PersonModel>
     * @param model
     * @return
     */
-   private Person toEntity( PersonModel model )
+   private PersonEntity toEntity( PersonModel model )
    {
       if( model == null )
       {
-         return new Person();
+         return new PersonEntity();
       }
-      Person entity = new Person();
+      PersonEntity entity = new PersonEntity();
       entity.setEmail( model.getCourriel() );
       entity.setFirstName( model.getPrenom() );
       if( model.getPersonId() != null && model.getPersonId().intValue() > 0 )

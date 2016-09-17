@@ -37,7 +37,7 @@ public class PersonController implements Controller<PersonModel>
    @Autowired
    private Services<PersonModel>       personService;
    
-   /**
+  /**
    * 
    * @see com.org.Controller#listAll()
    */
@@ -53,7 +53,7 @@ public class PersonController implements Controller<PersonModel>
       return new ResponseEntity<List<PersonModel>>( persons, HttpStatus.OK );
    }
    
-   /**
+  /**
    * 
    * @see com.org.Controller#getById(java.lang.Integer)
    */
@@ -71,9 +71,9 @@ public class PersonController implements Controller<PersonModel>
    }
    
    /**
-   * 
-   * @see com.org.Controller#getByEmail(java.lang.String, java.lang.String)
-   */
+    * 
+    * @see com.org.Controller#getByEmail(java.lang.String, java.lang.String)
+    */
    @RequestMapping(value = "/getPersonByEmail/{email}/{domain}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<PersonModel> getByEmail( @PathVariable("email") String email, @PathVariable("domain") String domain )
    {
@@ -88,9 +88,9 @@ public class PersonController implements Controller<PersonModel>
    }
    
    /**
-   * 
-   * @see com.org.Controller#getByLastName(java.lang.String)
-   */
+    * 
+    * @see com.org.Controller#getByLastName(java.lang.String)
+    */
    @RequestMapping(value = "/getPersonByLastName/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<PersonModel>> getByLastName( @PathVariable("lastName") String lastName )
    {
@@ -104,10 +104,10 @@ public class PersonController implements Controller<PersonModel>
       return new ResponseEntity<List<PersonModel>>( persons, HttpStatus.OK );
    }
    
-   /**
-   * 
-   * @see com.org.Controller#getByFirstAndLastName(java.lang.String, java.lang.String)
-   */
+ /**
+  * 
+  * @see com.org.Controller#getByFirstAndLastName(java.lang.String, java.lang.String)
+  */
    @RequestMapping(value = "/getPersonByFirstAndLastName/{firstName}/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<PersonModel>> getByFirstAndLastName(@PathVariable("firstName") String firstName , @PathVariable("lastName") String lastName )
    {
@@ -122,9 +122,9 @@ public class PersonController implements Controller<PersonModel>
    }
    
    /**
-   * 
-   * @see com.org.Controller#create(java.lang.Object)
-   */
+    * 
+    * @see com.org.Controller#create(java.lang.Object)
+    */
    @RequestMapping(value = "/createPerson/", method = RequestMethod.POST)
    public ResponseEntity<PersonModel> create( @RequestBody PersonModel person )
    {
@@ -140,10 +140,10 @@ public class PersonController implements Controller<PersonModel>
       return new ResponseEntity<PersonModel>( HttpStatus.CONFLICT );
    }
    
-   /**
-    * 
-    * @see com.org.Controller#update(java.lang.Integer, java.lang.Object)
-    */
+  /**
+   * 
+   * @see com.org.Controller#update(java.lang.Integer, java.lang.Object)
+   */
    @RequestMapping(value = "/updatePerson/{primaryKey}", method = RequestMethod.PUT)
    public ResponseEntity<PersonModel> update( @PathVariable("primaryKey") Integer primaryKey, @RequestBody PersonModel person )
    {
@@ -161,7 +161,7 @@ public class PersonController implements Controller<PersonModel>
       return new ResponseEntity<PersonModel>( currentPerson, HttpStatus.OK );
    }
    
-   /**
+  /**
    * 
    * @see com.org.Controller#deleteById(java.lang.Integer)
    */
@@ -176,18 +176,6 @@ public class PersonController implements Controller<PersonModel>
          return new ResponseEntity<PersonModel>( HttpStatus.NOT_FOUND );
       }
       personService.deleteById( primaryKey );
-      return new ResponseEntity<PersonModel>( new PersonModel(), HttpStatus.OK );
-   }
-   
-   /**
-    * 
-    * @see com.org.Controller#deleteAll()
-    */
-   @RequestMapping(value = "/deleteAllpersons/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<PersonModel> deleteAll()
-   {
-      logger.info( "Deleting All Persons" );
-      personService.deleteAlls();
       return new ResponseEntity<PersonModel>( new PersonModel(), HttpStatus.OK );
    }
 }

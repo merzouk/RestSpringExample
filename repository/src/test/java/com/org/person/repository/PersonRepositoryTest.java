@@ -94,6 +94,14 @@ public class PersonRepositoryTest
       /**
        * 
        */
+      p = personContrat.findByEmail( email + "@email.com");
+      id = p.getPersonId();
+      Assert.assertNotNull( id );
+      Assert.assertEquals( primaryKey, id );
+      Assert.assertEquals( email + "@email.com", p.getCourriel() );
+      /**
+       * 
+       */
       List<PersonModel> list = personContrat.findByLastName( lastName );
       Assert.assertEquals( 1, list.size() );
       p = list.get( 0 );

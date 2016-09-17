@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
 /**
  * 
  * A Renseigner.
@@ -17,30 +20,44 @@ import javax.persistence.Table;
  * @package : com.org.person.entity
  * @date    : 16 sept. 2016 22:52:45
  */
+@Entity
 @Table(name = "Person")
-@Entity(name = "Person")
-public class Person implements Serializable
+@NamedQueries({  
+                @NamedQuery(name = PersonEntity.QUERY_FIND_BY_PERSON_EMAIL, query = "SELECT p from PersonEntity p where p.email = :email"), 
+                @NamedQuery(name = PersonEntity.QUERY_FIND_BY_PERSON_LASTNAME, query = "SELECT p from PersonEntity p where p.lastName = :lastName"), 
+                @NamedQuery(name = PersonEntity.QUERY_FIND_BY_PERSON_LAST_FIRSTNAME, query = "SELECT p from PersonEntity p where p.lastName = :lastName and p.firstName = :firstName"), 
+                @NamedQuery(name = PersonEntity.QUERY_FIND_ALL,                      query = "SELECT p from  PersonEntity p ") })
+public class PersonEntity implements Serializable
 {
    
    /**
     * 
     */
-   private static final long serialVersionUID = 7471031565375439668L;
+   private static final long  serialVersionUID                    = 7471031565375439668L;
    
+   public static final String QUERY_FIND_BY_PERSON_LASTNAME       = "Person.findByLastName";
+   
+   public static final String QUERY_FIND_BY_PERSON_LAST_FIRSTNAME = "Person.findByFirstLastName";
+   
+   public static final String QUERY_FIND_BY_PERSON_EMAIL          = "Person.findByEmail";
+   
+   public static final String QUERY_FIND_ALL                      = "Person.findAll";
+   
+   @Column(name = "id")
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
-   private Integer           id;
+   private Integer            id;
    
    @Column(name = "firstName", length = 35, nullable = false, unique = false)
-   private String            firstName;
+   private String             firstName;
    
    @Column(name = "lastName", length = 35, nullable = false, unique = false)
-   private String            lastName;
+   private String             lastName;
    
    @Column(name = "email", length = 80, nullable = false, unique = true)
-   private String            email;
+   private String             email;
    
-   public Person()
+   public PersonEntity()
    {
       id = 0;
    }
@@ -51,7 +68,7 @@ public class Person implements Serializable
     * @param lastName
     * @param courriel
     */
-   public Person( Integer id, String firstName, String lastName, String courriel )
+   public PersonEntity( Integer id, String firstName, String lastName, String courriel )
    {
       super();
       this.id = id;
@@ -157,7 +174,7 @@ public class Person implements Serializable
       if( this == obj ) return true;
       if( obj == null ) return false;
       if( getClass() != obj.getClass() ) return false;
-      Person other = (Person) obj;
+      PersonEntity other = (PersonEntity) obj;
       if( email == null )
       {
          if( other.email != null ) return false;

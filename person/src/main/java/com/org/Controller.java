@@ -18,7 +18,7 @@ public interface Controller<T>
    
    /**
     * Retrieve Simgle T by primaryKey
-    * @param id
+    * @param primaryKey
     * @return
     */
    public ResponseEntity<T> getById( Integer primaryKey );
@@ -36,7 +36,7 @@ public interface Controller<T>
     * Retrieve list T by lastName
     * 
     * @param lastName
-    * @return list person
+    * @return list t
     */
    public ResponseEntity<List<T>> getByLastName( String lastName );
    
@@ -51,31 +51,25 @@ public interface Controller<T>
    /**
    * Create a new T
    * 
-   * @param person
+   * @param t
    * @return
    */
-   public ResponseEntity<T> create( T person );
+   public ResponseEntity<T> create( T t );
    
    /**
-    * Update a T
+    * Update a t by primaryKey
     * 
     * @param primaryKey
-    * @param person
+    * @param t
     * @return
     */
-   public ResponseEntity<T> update( Integer primaryKey, T person );
+   public ResponseEntity<T> update( Integer primaryKey, T t );
    
    /**
-    * Delete a T 
+    * Delete t by primaryKey
     * 
     * @param primaryKey
     * @return
     */
    public ResponseEntity<T> deleteById( Integer primaryKey );
-   
-   /**
-    * Delete All T 
-    * @return
-    */
-   public ResponseEntity<T> deleteAll();
 }

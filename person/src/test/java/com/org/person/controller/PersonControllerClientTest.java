@@ -33,7 +33,7 @@ public class PersonControllerClientTest
    
    private static final Logger logger           = LoggerFactory.getLogger( PersonControllerClientTest.class );
    
-   public static final String  REST_SERVICE_URI = "http://localhost:8585/person/gestionPersonnel/";
+   private static String       REST_SERVICE_URI = null;
    
    private static final int    LENGTH           = 10;
    
@@ -43,7 +43,7 @@ public class PersonControllerClientTest
       logger.info( "init" );
       try
       {
-         
+         REST_SERVICE_URI = "http://localhost:8585/person/gestionPersonnel/";
       }
       catch( Exception e )
       {
@@ -57,7 +57,7 @@ public class PersonControllerClientTest
       logger.info( "destroy" );
       try
       {
-         
+         REST_SERVICE_URI = null;
       }
       catch( Exception e )
       {
@@ -68,11 +68,11 @@ public class PersonControllerClientTest
    /**
     * GET
     */
-   @SuppressWarnings("unchecked")
    private static int listAllPersons()
    {
-      logger.info( "Testing listAllPersons API" );
+      logger.info( "Testing listAllPersons" );
       RestTemplate restTemplate = new RestTemplate();
+      @SuppressWarnings("unchecked")
       List<LinkedHashMap<String, Object>> personsMap = restTemplate.getForObject( REST_SERVICE_URI + "/persons/", List.class );
       int counter = 0;
       if( personsMap != null )
@@ -95,7 +95,7 @@ public class PersonControllerClientTest
     */
    private PersonModel getPerson( Integer primaryKey ) throws PersonException
    {
-      logger.info( "Testing getPerson API" );
+      logger.info( "Testing getPerson" );
       RestTemplate restTemplate = new RestTemplate();
       PersonModel person = restTemplate.getForObject( REST_SERVICE_URI + "/getPersonById/" + primaryKey, PersonModel.class );
       if( person == null )
@@ -111,7 +111,7 @@ public class PersonControllerClientTest
     */
    private static void createPerson()
    {
-      logger.info( "Testing create Person API" );
+      logger.info( "Testing create Person" );
       RestTemplate restTemplate = new RestTemplate();
       PersonModel person = new PersonModel( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
       URI uri = restTemplate.postForLocation( REST_SERVICE_URI + "/createPerson/", person, PersonModel.class );
@@ -119,6 +119,29 @@ public class PersonControllerClientTest
       {
          logger.info( "Location : " + uri.toASCIIString() );
       }
+   }
+   
+   /**
+    *  PUT
+    */
+   private static void updatePerson( Integer primaryKey )
+   {
+      logger.info( "Testing update Person" );
+      RestTemplate restTemplate = new RestTemplate();
+      PersonModel person = new PersonModel( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
+      restTemplate.put( REST_SERVICE_URI + "/updatePerson/" + primaryKey, person );
+      logger.info( "" + person.toString() );
+   }
+   
+   /**
+    *  
+    *  DELETE
+    */
+   private static void deletePerson( Integer primaryKey )
+   {
+      logger.info( "Testing delete Person" );
+      RestTemplate restTemplate = new RestTemplate();
+      restTemplate.delete( REST_SERVICE_URI + "/deletePersonById/" + primaryKey );
    }
    
    private static String generateStringRandom( int length )
@@ -136,41 +159,6 @@ public class PersonControllerClientTest
          sb.append( c );
       }
       return sb.toString();
-   }
-   
-   /**
-    *  PUT
-    */
-   private static void updatePerson( Integer primaryKey )
-   {
-      logger.info( "Testing update Person API" );
-      RestTemplate restTemplate = new RestTemplate();
-      PersonModel person = new PersonModel( null, generateStringRandom( LENGTH ), generateStringRandom( LENGTH ), generateStringRandom( LENGTH ) + "@courriel.com" );
-      restTemplate.put( REST_SERVICE_URI + "/updatePerson/" + primaryKey, person );
-      logger.info( "" + person.toString() );
-   }
-   
-   /**
-    *  
-    *  DELETE
-    */
-   private static void deletePerson( Integer primaryKey )
-   {
-      logger.info( "Testing delete Person API" );
-      RestTemplate restTemplate = new RestTemplate();
-      restTemplate.delete( REST_SERVICE_URI + "/deletePersonById/" + primaryKey );
-   }
-   
-   /**
-    *  
-    *  DELETE 
-    */
-   @SuppressWarnings("unused")
-   private static void deleteAllPersons()
-   {
-      logger.info( "Testing all delete Persons API" );
-      RestTemplate restTemplate = new RestTemplate();
-      restTemplate.delete( REST_SERVICE_URI + "/deleteAllpersons/" );
    }
    
    @Test
