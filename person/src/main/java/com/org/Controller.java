@@ -1,5 +1,6 @@
 package com.org;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
  * @package : com.org.person.controller
  * @date    : 11 sept. 2016 12:55:39
  */
-public interface Controller<T>
+public interface Controller<T, I extends Serializable>
 {
    
    public ResponseEntity<List<T>> listAll();
@@ -21,7 +22,7 @@ public interface Controller<T>
     * @param primaryKey
     * @return
     */
-   public ResponseEntity<T> getById( Integer primaryKey );
+   public ResponseEntity<T> getById( I primaryKey );
    
    /**
    * Retrieve Single T by email
@@ -63,7 +64,7 @@ public interface Controller<T>
     * @param t
     * @return
     */
-   public ResponseEntity<T> update( Integer primaryKey, T t );
+   public ResponseEntity<T> update( I primaryKey, T t );
    
    /**
     * Delete t by primaryKey
@@ -71,5 +72,5 @@ public interface Controller<T>
     * @param primaryKey
     * @return
     */
-   public ResponseEntity<T> deleteById( Integer primaryKey );
+   public ResponseEntity<T> deleteById( I primaryKey );
 }

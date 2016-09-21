@@ -31,7 +31,7 @@ import com.org.person.model.PersonModel;
  * @date    : 10 sept. 2016 09:20:30
  */
 @RestController
-public class PersonController implements Controller<PersonModel>
+public class PersonController implements Controller<PersonModel, Integer>
 {
    
    private static final Logger  logger = LoggerFactory.getLogger( PersonController.class );
