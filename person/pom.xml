@@ -18,10 +18,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.org</groupId>
-			<artifactId>service</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>com.org</groupId>

@@ -11,7 +11,6 @@
 	<modules>
 		<module>repository</module>
 		<module>person</module>
-		<module>service</module>
 		<module>model</module>
 		<module>contrat</module>
 		<module>use-cases</module>
@@ -37,11 +36,6 @@
 			<dependency>
 				<groupId>com.org</groupId>
 				<artifactId>repository</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.org</groupId>
-				<artifactId>service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
